@@ -1,35 +1,32 @@
-import {StatusBar} from 'expo-status-bar';
-import {Text, View} from 'react-native';
+import React from 'react';
+import {StatusBar} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
-export default function App() {
-  return (
-    <Container>
-      <TextLine>Tu pues 🤢🤮</TextLine>
-      <TextLine>Tu pues 🤢🤮</TextLine>
-      <TextLine>Tu pues 🤢🤮</TextLine>
-      <TextLine>Tu pues 🤢🤮</TextLine>
-      <TextLine>Tu pues 🤢🤮</TextLine>
-      <TextLine>Tu pues 🤢🤮</TextLine>
-      <TextLine>Tu pues 🤢🤮</TextLine>
-      <TextLine>Tu pues 🤢🤮</TextLine>
-      <StatusBar style="auto" />
-    </Container>
-  );
-}
+import {appBackgroundColor, topBarBackgroundColor} from './src/lib/theme';
 
-const Container = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #1b1b1b;
-  color: #eee;
-  width: 100%;
-  height: 100%;
+export const App: React.FC = () => (
+  <SafeAreaProvider>
+    <AppWithProvider />
+    <StatusBar barStyle="light-content" />
+  </SafeAreaProvider>
+);
+App.displayName = 'App';
+
+const AppWithProvider: React.FC = () => {
+  return (
+    <AppWrapper>
+      <AppContainer></AppContainer>
+    </AppWrapper>
+  );
+};
+AppWithProvider.displayName = 'AppWithProvider';
+
+const AppWrapper = styled.View`
+  background-color: ${topBarBackgroundColor};
 `;
 
-const TextLine = styled.Text`
-  background-color: #ffffff22;
-  margin: 2px;
-  padding: 4px 8px;
+const AppContainer = styled.View`
+  height: 100%;
+  background-color: ${appBackgroundColor};
 `;
