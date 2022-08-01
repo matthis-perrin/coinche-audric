@@ -1,32 +1,3 @@
-import React from 'react';
-import {StatusBar} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import styled from 'styled-components/native';
+import {App} from './src/app';
 
-import {appBackgroundColor, topBarBackgroundColor} from './src/lib/theme';
-
-export const App: React.FC = () => (
-  <SafeAreaProvider>
-    <AppWithProvider />
-    <StatusBar barStyle="light-content" />
-  </SafeAreaProvider>
-);
-App.displayName = 'App';
-
-const AppWithProvider: React.FC = () => {
-  return (
-    <AppWrapper>
-      <AppContainer></AppContainer>
-    </AppWrapper>
-  );
-};
-AppWithProvider.displayName = 'AppWithProvider';
-
-const AppWrapper = styled.View`
-  background-color: ${topBarBackgroundColor};
-`;
-
-const AppContainer = styled.View`
-  height: 100%;
-  background-color: ${appBackgroundColor};
-`;
+export default App;
