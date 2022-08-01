@@ -1,5 +1,5 @@
 import React from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, Text} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
@@ -16,7 +16,9 @@ App.displayName = 'App';
 const AppWithProvider: React.FC = () => {
   return (
     <AppWrapper>
-      <AppContainer></AppContainer>
+      <AppContainer>
+        <Text>Test!!</Text>
+      </AppContainer>
     </AppWrapper>
   );
 };
