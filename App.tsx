@@ -5,6 +5,13 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Tu pues 🤢🤮</Text>
+      <Text>Tu pues 🤢🤮</Text>
+      <Text>Tu pues 🤢🤮</Text>
+      <Text>Tu pues 🤢🤮</Text>
+      <Text>Tu pues 🤢🤮</Text>
+      <Text>Tu pues 🤢🤮</Text>
+      <Text>Tu pues 🤢🤮</Text>
+      <Text>Tu pues 🤢🤮</Text>
       <StatusBar style="auto" />
     </View>
   );
