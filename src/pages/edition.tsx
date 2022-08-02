@@ -21,7 +21,6 @@ import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerIcon}
 export const Edition: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
-  console.log(players);
   const onPressAddPlayer = (): void => {
     addPlayer();
   };
