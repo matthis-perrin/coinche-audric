@@ -20,7 +20,6 @@ export const useApp = appStore.useData;
 export const setApp = appStore.setData;
 
 export const setPlayer = (player: Player): void => {
-  console.log('setPlayer');
   const players = getPlayers();
   players.push(player);
   setPlayers(players);
