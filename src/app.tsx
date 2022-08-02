@@ -6,6 +6,7 @@ import styled from 'styled-components/native';
 import {useApp} from './lib/stores';
 import {Accueil} from './pages/accueil';
 import {Tirage} from './pages/tirage';
+import {Edition} from './pages/edition';
 import {appBackgroundColor, topBarBackgroundColor} from './lib/theme';
 
 export const App: React.FC = () => (
@@ -24,6 +25,8 @@ const AppWithProvider: React.FC = () => {
     content = <Accueil />;
   } else if (app.currentPage === 'tirage') {
     content = <Tirage />;
+  } else if (app.currentPage === 'edition') {
+    content = <Edition />;
   }
 
   return (

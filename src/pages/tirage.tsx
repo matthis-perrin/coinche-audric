@@ -26,7 +26,7 @@ export const Tirage: React.FC = () => {
           <CustomButton
             text="Edition"
             icon="account-edit-outline"
-            onPress={() => setApp({...app, currentPage: 'accueil'})}
+            onPress={() => setApp({...app, currentPage: 'edition'})}
             width={topBarButtonWidth}
           />
         }
