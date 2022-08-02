@@ -20,9 +20,7 @@ export const useApp = appStore.useData;
 export const setApp = appStore.setData;
 
 export const setPlayer = (player: Player): void => {
-  const players = getPlayers();
-  players.push(player);
-  setPlayers(players);
+  setPlayers([...getPlayers(), player]);
 };
 
 export const delPlayer = (player: Player): void => {
