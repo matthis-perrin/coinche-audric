@@ -13,3 +13,4 @@ export const BottomBar: React.FC = () => {
     />
   );
 };
+BottomBar.displayName = 'BottomBar';

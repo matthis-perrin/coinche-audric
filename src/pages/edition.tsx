@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Alert, Keyboard} from 'react-native';
+import {Keyboard} from 'react-native';
 import styled from 'styled-components/native';
 
 import {BottomBar} from '../components/bottom_bar';
@@ -35,12 +35,20 @@ export const Edition: React.FC = () => {
     player.name = text;
   };
   const sortedPlayer = players.slice();
-  sortedPlayer.sort((p1, p2) => p1.name.localeCompare(p2.name));
+  sortedPlayer.sort((p1, p2) => {
+    if (p1.name === `Nouveau joueur`) {
+      return 1;
+    } else if (p2.name === `Nouveau joueur`) {
+      return -1;
+    } else {
+      return p1.name.localeCompare(p2.name);
+    }
+  });
   const scrollViewContent: JSX.Element[] = [];
   sortedPlayer.forEach((p) =>
     scrollViewContent.push(
       <PlayerWrapper key={p.id}>
-        <TextInputFailDesign
+        <TextInputIcon
           caretHidden
           selectTextOnFocus
           onChangeText={(text: string) => onIconChange(text, p)}
@@ -131,7 +139,7 @@ const TextInputPlayer = styled.TextInput`
   margin: 0 ${spacing / 2}px;
 `;
 
-const TextInputFailDesign = styled.TextInput`
+const TextInputIcon = styled.TextInput`
   text-align: center;
   flex-shrink: 0;
   background-color: ${inputBackgroundColor};

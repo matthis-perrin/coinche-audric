@@ -24,11 +24,31 @@ export const setPlayer = (player: Player): void => {
 };
 
 export const delPlayer = (player: Player): void => {
-  setPlayers(getPlayers().filter((p) => p.id !== player.id));
+  const last_players = getPlayers();
+  const new_players: Player[] = [];
+  for (const p of last_players) {
+    if (p.id !== player.id) {
+      new_players.push(p);
+    }
+  }
+  setPlayers(new_players);
+  // setPlayers(getPlayers().filter((p) => p.id !== player.id));
 };
 
-export const setPlayerIcon = (text: String, player: Player): void => {
-  setPlayers(getPlayers().map((p) => (p.id === player.id ? {...p, failDesign: text} : p)));
+export const setPlayerIcon = (text: string, player: Player): void => {
+  const current_players = getPlayers();
+  const new_players: Player[] = [];
+  for (const p of current_players) {
+    if (p.id === player.id) {
+      const copy_p = {...p};
+      copy_p.icon = text;
+      new_players.push(copy_p);
+    } else {
+      new_players.push(p);
+    }
+  }
+  setPlayers(new_players);
+  // setPlayers(getPlayers().map((p) => (p.id === player.id ? {...p, icon: text} : p)));
 };
 
 export const addPlayer = (): void => {
