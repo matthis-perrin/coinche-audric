@@ -7,7 +7,7 @@ interface App {
 export interface Player {
   id: number;
   name: string;
-  icon: string;
+  emoji: string;
 }
 
 const playerDataStore = createPersistentDataStore<Player[]>('players', []);
@@ -35,20 +35,20 @@ export const delPlayer = (player: Player): void => {
   // setPlayers(getPlayers().filter((p) => p.id !== player.id));
 };
 
-export const setPlayerIcon = (text: string, player: Player): void => {
+export const setPlayerEmoji = (text: string, player: Player): void => {
   const current_players = getPlayers();
   const new_players: Player[] = [];
   for (const p of current_players) {
     if (p.id === player.id) {
       const copy_p = {...p};
-      copy_p.icon = text;
+      copy_p.emoji = text;
       new_players.push(copy_p);
     } else {
       new_players.push(p);
     }
   }
   setPlayers(new_players);
-  // setPlayers(getPlayers().map((p) => (p.id === player.id ? {...p, icon: text} : p)));
+  // setPlayers(getPlayers().map((p) => (p.id === player.id ? {...p, emoji: text} : p)));
 };
 
 export const addPlayer = (): void => {
@@ -56,7 +56,7 @@ export const addPlayer = (): void => {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     id: Math.round(Math.random() * 1000000),
     name: `Nouveau joueur`,
-    icon: '💣',
+    emoji: '💣',
   };
   setPlayer(newPlayer);
 };

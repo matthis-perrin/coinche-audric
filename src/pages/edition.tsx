@@ -1,7 +1,6 @@
-import React, {Fragment} from 'react';
-import {Keyboard} from 'react-native';
+import React, {Fragment, useState} from 'react';
 import styled from 'styled-components/native';
-
+import {Categories, EmojiSelector} from '../components/emoji_picker';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
@@ -15,22 +14,30 @@ import {
   buttonHeight,
   inputBackgroundColor,
   pastilleBackgroundColor,
+  appBackgroundColor,
 } from '../lib/theme';
-import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerIcon} from '../lib/stores';
+import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji} from '../lib/stores';
 
 export const Edition: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
+  const [emojiPickerPlayer, setEmojiPickerPlayer] = useState<Player | undefined>();
+
   const onPressAddPlayer = (): void => {
     addPlayer();
   };
   const onPressDeletePlayer = (player: Player): void => {
     delPlayer(player);
   };
-  const onIconChange = (text: string, player: Player): void => {
-    setPlayerIcon([...text].slice(-1)[0] ?? '💣', player);
-    Keyboard.dismiss();
+  const handlePlayerEmojiSelected = (player: Player, emoji: string): void => {
+    setPlayerEmoji(emoji, player);
+    setEmojiPickerPlayer(undefined);
   };
+
+  const handlePlayerEmojiPress = (player: Player): void => {
+    setEmojiPickerPlayer(player);
+  };
+
   const onTextChange = (text: string, player: Player): void => {
     player.name = text;
   };
@@ -48,12 +55,7 @@ export const Edition: React.FC = () => {
   sortedPlayer.forEach((p) =>
     scrollViewContent.push(
       <PlayerWrapper key={p.id}>
-        <TextInputIcon
-          caretHidden
-          selectTextOnFocus
-          onChangeText={(text: string) => onIconChange(text, p)}
-          defaultValue={p.icon}
-        />
+        <PlayerEmoji onPress={() => handlePlayerEmojiPress(p)}>{p.emoji}</PlayerEmoji>
         <TextInputPlayer
           selectTextOnFocus
           onChangeText={(text: string) => onTextChange(text, p)}
@@ -91,6 +93,23 @@ export const Edition: React.FC = () => {
       >
         {scrollViewContent}
       </StyledScrollView>
+      {emojiPickerPlayer ? (
+        <EmojiWrapper>
+          <EmojiSelector
+            theme="#007AFF"
+            columns={6}
+            placeholder="Search..."
+            showSearchBar={false}
+            showHistory={false}
+            showTabs={false}
+            showSectionTitles={false}
+            category={Categories.all}
+            onEmojiSelected={(emoji) => handlePlayerEmojiSelected(emojiPickerPlayer, emoji)}
+          />
+        </EmojiWrapper>
+      ) : (
+        <Fragment />
+      )}
       <WrapperAdd>
         <CustomButton icon="account-plus" text="Ajouter joueur" onPress={onPressAddPlayer} size="large" />
       </WrapperAdd>
@@ -99,6 +118,28 @@ export const Edition: React.FC = () => {
   );
 };
 Edition.displayName = 'Edition';
+
+const PlayerEmoji = styled.Text`
+  flex-shrink: 0;
+  background-color: ${inputBackgroundColor};
+  font-size: ${fontSizes.medium}px;
+  height: ${buttonHeight.medium}px;
+  width: ${buttonHeight.medium}px;
+  text-align: center;
+  line-height: ${buttonHeight.medium}px;
+  border-radius: ${borderRadius}px;
+`;
+
+const EmojiWrapper = styled.View`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: ${appBackgroundColor};
+  padding: 40px 0 0 0;
+`;
 
 const Titre = styled.Text`
   font-size: ${fontSizes.medium}px;
