@@ -31,7 +31,7 @@ export const buttonHeight = {small: 30, medium: 40, large: 48, extraLarge: 60};
 export const borderRadius = 4;
 export const topBarButtonWidth = 120;
 export const scoreButtonWidth = 70;
-export const spacing = 16;
+export const spacing = 12;
 
 //
 // Elevation

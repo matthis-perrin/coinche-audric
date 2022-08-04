@@ -1,9 +1,11 @@
 import React, {Fragment, useState} from 'react';
+import {Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {Categories, EmojiSelector} from '../components/emoji_picker';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
+import {VerticalSpacing} from '../components/spacing';
 // import {clearPersistentDataStore} from '../lib/data_store';
 import {
   fontSizes,
@@ -26,9 +28,27 @@ export const Edition: React.FC = () => {
   const onPressAddPlayer = (): void => {
     addPlayer();
   };
-  const onPressDeletePlayer = (player: Player): void => {
-    delPlayer(player);
+
+  const onPressDeletePlayer = (p: Player): void => {
+    if (p.name !== `Nouveau joueur`) {
+      Alert.alert('Confirmation', `Voulez-vous supprimer ${p.name} ?`, [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Supprimer',
+          onPress: () => {
+            delPlayer(p);
+          },
+          style: 'destructive',
+        },
+      ]);
+    } else {
+      delPlayer(p);
+    }
   };
+
   const handlePlayerEmojiSelected = (player: Player, emoji: string): void => {
     setPlayerEmoji(emoji, player);
     setEmojiPickerPlayer(undefined);
@@ -41,6 +61,7 @@ export const Edition: React.FC = () => {
   const onTextChange = (text: string, player: Player): void => {
     player.name = text;
   };
+
   const sortedPlayer = players.slice();
   sortedPlayer.sort((p1, p2) => {
     if (p1.name === `Nouveau joueur`) {
@@ -51,6 +72,7 @@ export const Edition: React.FC = () => {
       return p1.name.localeCompare(p2.name);
     }
   });
+
   const scrollViewContent: JSX.Element[] = [];
   sortedPlayer.forEach((p) =>
     scrollViewContent.push(
@@ -61,8 +83,14 @@ export const Edition: React.FC = () => {
           onChangeText={(text: string) => onTextChange(text, p)}
           defaultValue={p.name}
         />
-        <CustomButton icon="backspace-outline" onPress={() => onPressDeletePlayer(p)} />
-      </PlayerWrapper>
+        <CustomButton
+          iconSizeRatio={1.2}
+          icon="trash-can-outline"
+          size="medium"
+          onPress={() => onPressDeletePlayer(p)}
+        />
+      </PlayerWrapper>,
+      <VerticalSpacing height={spacing} />
     )
   );
   return (
@@ -178,20 +206,4 @@ const TextInputPlayer = styled.TextInput`
   border-radius: ${borderRadius}px;
   padding-left: ${spacing}px;
   margin: 0 ${spacing / 2}px;
-`;
-
-const TextInputIcon = styled.TextInput`
-  text-align: center;
-  flex-shrink: 0;
-  background-color: ${inputBackgroundColor};
-  font-size: ${fontSizes.medium}px;
-  height: ${buttonHeight.medium}px;
-  width: ${buttonHeight.medium}px;
-  border-radius: ${borderRadius}px;
-`;
-
-const WrapperSwap = styled.View`
-  align-items: center;
-  margin: ${-spacing / 2}px 0;
-  z-index: 2;
 `;
