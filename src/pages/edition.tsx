@@ -1,12 +1,11 @@
-import React, {Fragment, useState} from 'react';
-import {Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, View} from 'react-native';
+import React, {Fragment, useState, useEffect} from 'react';
+import {Alert, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import styled from 'styled-components/native';
 import {Categories, EmojiSelector} from '../components/emoji_picker';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
 import {VerticalSpacing} from '../components/spacing';
-// import {clearPersistentDataStore} from '../lib/data_store';
 import {
   fontSizes,
   spacing,
@@ -17,13 +16,29 @@ import {
   inputBackgroundColor,
   pastilleBackgroundColor,
   appBackgroundColor,
+  primary,
 } from '../lib/theme';
-import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji} from '../lib/stores';
+import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji, setPlayerName} from '../lib/stores';
 
 export const Edition: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
   const [emojiPickerPlayer, setEmojiPickerPlayer] = useState<Player | undefined>();
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true); // or some other action
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false); // or some other action
+    });
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   const onPressAddPlayer = (): void => {
     addPlayer();
@@ -59,7 +74,7 @@ export const Edition: React.FC = () => {
   };
 
   const onTextChange = (text: string, player: Player): void => {
-    player.name = text;
+    setPlayerName(text, player);
   };
 
   const sortedPlayer = players.slice();
@@ -95,42 +110,48 @@ export const Edition: React.FC = () => {
   );
   return (
     <Fragment>
-      <TopBar
-        left={
-          <CustomButton
-            text="Accueil"
-            icon="home"
-            onPress={() => setApp({...app, currentPage: 'accueil'})}
-            width={topBarButtonWidth}
-          />
-        }
-        middle={<Titre>{`Edition`}</Titre>}
-        right={
-          <CustomButton
-            text="Tirage"
-            icon="dice-3"
-            onPress={() => setApp({...app, currentPage: 'tirage'})}
-            width={topBarButtonWidth}
-          />
-        }
-      />
-      {/* <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-      <StyledScrollView
-        keyboardShouldPersistTaps="handled"
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-      >
-        {scrollViewContent}
-      </StyledScrollView>
-      {/* </TouchableWithoutFeedback>
-      </KeyboardAvoidingView> */}
+      <StyleKeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={180}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <WrapperStyleKeyboardAvoidingView>
+            <TopBar
+              left={
+                <CustomButton
+                  text="Accueil"
+                  icon="home"
+                  onPress={() => setApp({...app, currentPage: 'accueil'})}
+                  width={topBarButtonWidth}
+                />
+              }
+              middle={<Titre>{`Edition`}</Titre>}
+              right={
+                <CustomButton
+                  text="Tirage"
+                  icon="dice-3"
+                  onPress={() => setApp({...app, currentPage: 'tirage'})}
+                  width={topBarButtonWidth}
+                />
+              }
+            />
+            <WrapperAdd>
+              <CustomButton icon="account-plus" text="Ajouter joueur" onPress={onPressAddPlayer} size="large" />
+            </WrapperAdd>
+            <StyledScrollView>{scrollViewContent}</StyledScrollView>
+            {isKeyboardVisible ? (
+              <Fragment />
+            ) : (
+              <Fragment>
+                <BottomBar />
+              </Fragment>
+            )}
+          </WrapperStyleKeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </StyleKeyboardAvoidingView>
       {emojiPickerPlayer ? (
         <EmojiWrapper>
           <EmojiSelector
             theme="#007AFF"
-            columns={6}
-            placeholder="Search..."
+            columns={8}
+            placeholder="Recherche..."
             showSearchBar={false}
             showHistory={false}
             showTabs={false}
@@ -142,17 +163,41 @@ export const Edition: React.FC = () => {
       ) : (
         <Fragment />
       )}
-      <WrapperAdd>
-        <CustomButton icon="account-plus" text="Ajouter joueur" onPress={onPressAddPlayer} size="large" />
-      </WrapperAdd>
-      <BottomBar />
     </Fragment>
   );
 };
 Edition.displayName = 'Edition';
 
+const Titre = styled.Text`
+  font-size: ${fontSizes.medium}px;
+  flex-grow: 1;
+  text-align: center;
+  color: ${topBarColor};
+`;
+
+const StyleKeyboardAvoidingView = styled.KeyboardAvoidingView`
+  flex: 1;
+`;
+
+const WrapperStyleKeyboardAvoidingView = styled.View`
+  flex-grow: 1;
+`;
+
+const StyledScrollView = styled.ScrollView`
+  flex-grow: 1;
+`;
+
+const PlayerWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: ${spacing}px;
+  margin: 0px ${spacing}px;
+  border-radius: ${borderRadius * 2}px;
+  background-color: ${pastilleBackgroundColor};
+`;
+
 const PlayerEmoji = styled.Text`
-  flex-shrink: 0;
   background-color: ${inputBackgroundColor};
   font-size: ${fontSizes.medium}px;
   height: ${buttonHeight.medium}px;
@@ -160,6 +205,16 @@ const PlayerEmoji = styled.Text`
   text-align: center;
   line-height: ${buttonHeight.medium}px;
   border-radius: ${borderRadius}px;
+`;
+
+const TextInputPlayer = styled.TextInput`
+  flex-grow: 1;
+  background-color: ${inputBackgroundColor};
+  font-size: ${fontSizes.medium}px;
+  height: ${buttonHeight.medium}px;
+  border-radius: ${borderRadius}px;
+  padding-left: ${spacing}px;
+  margin: 0 ${spacing / 2}px;
 `;
 
 const EmojiWrapper = styled.View`
@@ -173,41 +228,8 @@ const EmojiWrapper = styled.View`
   padding: 40px 0 0 0;
 `;
 
-const Titre = styled.Text`
-  font-size: ${fontSizes.medium}px;
-  flex-grow: 1;
-  text-align: center;
-  color: ${topBarColor};
-`;
-
-const StyledScrollView = styled.ScrollView`
-  flex-grow: 1;
-  margin: ${spacing}px;
-  margin-bottom: 0;
-`;
-
 const WrapperAdd = styled.View`
   margin: ${spacing}px;
   margin-bottom: 0;
   background-color: transparent;
-`;
-
-const PlayerWrapper = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: ${spacing}px;
-  margin: 0px ${spacing}px;
-  border-radius: ${borderRadius * 2}px;
-  background-color: ${pastilleBackgroundColor};
-`;
-
-const TextInputPlayer = styled.TextInput`
-  flex-grow: 1;
-  background-color: ${inputBackgroundColor};
-  font-size: ${fontSizes.medium}px;
-  height: ${buttonHeight.medium}px;
-  border-radius: ${borderRadius}px;
-  padding-left: ${spacing}px;
-  margin: 0 ${spacing / 2}px;
 `;
