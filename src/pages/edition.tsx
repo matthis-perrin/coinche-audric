@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from 'react';
-import {Alert} from 'react-native';
+import {Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, View} from 'react-native';
 import styled from 'styled-components/native';
 import {Categories, EmojiSelector} from '../components/emoji_picker';
 import {BottomBar} from '../components/bottom_bar';
@@ -114,6 +114,8 @@ export const Edition: React.FC = () => {
           />
         }
       />
+      {/* <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
       <StyledScrollView
         keyboardShouldPersistTaps="handled"
         showsHorizontalScrollIndicator={false}
@@ -121,6 +123,8 @@ export const Edition: React.FC = () => {
       >
         {scrollViewContent}
       </StyledScrollView>
+      {/* </TouchableWithoutFeedback>
+      </KeyboardAvoidingView> */}
       {emojiPickerPlayer ? (
         <EmojiWrapper>
           <EmojiSelector
