@@ -1,5 +1,13 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import {Alert, KeyboardAvoidingView, Keyboard} from 'react-native';
+import React, {Fragment, useState, useEffect, useRef} from 'react';
+import {
+  Alert,
+  Keyboard,
+  ScrollView,
+  TextInput,
+  LayoutChangeEvent,
+  LayoutRectangle,
+  LayoutAnimation,
+} from 'react-native';
 import styled from 'styled-components/native';
 import {Categories, EmojiSelector} from '../components/emoji_picker';
 import {BottomBar} from '../components/bottom_bar';
@@ -17,12 +25,57 @@ import {
   pastilleBackgroundColor,
   appBackgroundColor,
 } from '../lib/theme';
-import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji, setPlayerName} from '../lib/stores';
+import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji} from '../lib/stores';
 
 export const Edition: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
   const [emojiPickerPlayer, setEmojiPickerPlayer] = useState<Player | undefined>();
+
+  const scrollViewRef = useRef<ScrollView | null>();
+  const scrollViewLayout = useRef<LayoutRectangle | null>();
+  const scrollViewContentSize = useRef(0);
+  const inputByPlayer = useRef(new Map<number, TextInput>());
+  const layoutByPlayer = useRef(new Map<number, LayoutRectangle>());
+  const [contentOffset, setContentOffset] = useState(0);
+
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', (e) => {
+      const keyboardHeight = e.endCoordinates.height;
+      if (!scrollViewLayout.current) {
+        return;
+      }
+      for (const [playerId, input] of inputByPlayer.current.entries()) {
+        const inputLayout = layoutByPlayer.current.get(playerId);
+        if (!inputLayout) {
+          continue;
+        }
+        if (input.isFocused()) {
+          const visibleScrollViewHeight = scrollViewLayout.current.height - keyboardHeight;
+          const idealInputPosition = (visibleScrollViewHeight - inputLayout.height) / 2;
+          const targetScroll = inputLayout.y - idealInputPosition;
+          const maxScroll = scrollViewContentSize.current - scrollViewLayout.current.height;
+          const scrollAgainAfterRelayout = targetScroll > maxScroll;
+          LayoutAnimation.configureNext(LayoutAnimation.create(e.duration, LayoutAnimation.Types[e.easing]), () => {
+            if (scrollAgainAfterRelayout) {
+              scrollViewRef.current?.scrollTo({x: 0, y: targetScroll, animated: true});
+            }
+          });
+          setContentOffset(keyboardHeight);
+          scrollViewRef.current?.scrollTo({x: 0, y: targetScroll, animated: true});
+        }
+      }
+    });
+    const keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', (e) => {
+      LayoutAnimation.configureNext(LayoutAnimation.create(e.duration, LayoutAnimation.Types[e.easing]));
+      setContentOffset(0);
+    });
+
+    return () => {
+      keyboardWillShowListener.remove();
+      keyboardWillHideListener.remove();
+    };
+  }, []);
 
   const onPressAddPlayer = (): void => {
     addPlayer();
@@ -81,9 +134,21 @@ export const Edition: React.FC = () => {
       scrollViewContent.push(<VerticalSpacing height={spacing} />);
     }
     scrollViewContent.push(
-      <PlayerWrapper key={p.id}>
+      <PlayerWrapper
+        key={p.id}
+        onLayout={(e: LayoutChangeEvent) => {
+          layoutByPlayer.current.set(p.id, e.nativeEvent.layout);
+        }}
+      >
         <PlayerEmoji onPress={() => handlePlayerEmojiPress(p)}>{p.emoji}</PlayerEmoji>
         <TextInputPlayer
+          ref={(ref: TextInput | null) => {
+            if (ref === null) {
+              inputByPlayer.current.delete(p.id);
+            } else {
+              inputByPlayer.current.set(p.id, ref);
+            }
+          }}
           selectTextOnFocus
           onChangeText={(text: string) => onTextChange(text, p)}
           defaultValue={p.name}
@@ -99,39 +164,49 @@ export const Edition: React.FC = () => {
   });
   return (
     <Fragment>
-      <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={20}>
-        <Fragment>
-          <TopBar
-            left={
-              <CustomButton
-                text="Accueil"
-                icon="home"
-                onPress={() => setApp({...app, currentPage: 'accueil'})}
-                width={topBarButtonWidth}
-              />
+      <Fragment>
+        <TopBar
+          left={
+            <CustomButton
+              text="Accueil"
+              icon="home"
+              onPress={() => setApp({...app, currentPage: 'accueil'})}
+              width={topBarButtonWidth}
+            />
+          }
+          middle={<Titre>{`Edition`}</Titre>}
+          right={
+            <CustomButton
+              text="Tirage"
+              icon="dice-3"
+              onPress={() => setApp({...app, currentPage: 'tirage'})}
+              width={topBarButtonWidth}
+            />
+          }
+        />
+        <WrapperAdd>
+          <CustomButton icon="account-plus" text="Ajouter joueur!" onPress={onPressAddPlayer} size="large" />
+        </WrapperAdd>
+        <ScrollView
+          ref={(ref) => (scrollViewRef.current = ref)}
+          onLayout={(e: LayoutChangeEvent) => {
+            if (contentOffset === 0) {
+              scrollViewLayout.current = e.nativeEvent.layout;
             }
-            middle={<Titre>{`Edition`}</Titre>}
-            right={
-              <CustomButton
-                text="Tirage"
-                icon="dice-3"
-                onPress={() => setApp({...app, currentPage: 'tirage'})}
-                width={topBarButtonWidth}
-              />
-            }
-          />
-          <WrapperAdd>
-            <CustomButton icon="account-plus" text="Ajouter joueur!" onPress={onPressAddPlayer} size="large" />
-          </WrapperAdd>
-          <StyledScrollView
-            keyboardShouldPersistTaps="handled"
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-          >
-            {scrollViewContent}
-          </StyledScrollView>
-        </Fragment>
-      </KeyboardAvoidingView>
+          }}
+          onContentSizeChange={(width: number, height: number) => {
+            scrollViewContentSize.current = height;
+          }}
+          style={{marginBottom: contentOffset, flexGrow: 1}}
+          scrollEventThrottle={100}
+          keyboardShouldPersistTaps="handled"
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        >
+          {scrollViewContent}
+          <BottomBar />
+        </ScrollView>
+      </Fragment>
       {emojiPickerPlayer ? (
         <EmojiWrapper>
           <EmojiSelector
@@ -149,7 +224,6 @@ export const Edition: React.FC = () => {
       ) : (
         <Fragment />
       )}
-      <BottomBar />
     </Fragment>
   );
 };
@@ -166,10 +240,6 @@ const WrapperAdd = styled.View`
   margin: ${spacing}px;
   margin-top: 0;
   background-color: transparent;
-`;
-
-const StyledScrollView = styled.ScrollView`
-  flex-grow: 1;
 `;
 
 const PlayerWrapper = styled.View`
