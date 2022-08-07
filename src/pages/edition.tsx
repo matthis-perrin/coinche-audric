@@ -7,6 +7,7 @@ import {
   LayoutChangeEvent,
   LayoutRectangle,
   LayoutAnimation,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import styled from 'styled-components/native';
 import {Categories, EmojiSelector} from '../components/emoji_picker';
@@ -38,9 +39,11 @@ export const Edition: React.FC = () => {
   const inputByPlayer = useRef(new Map<number, TextInput>());
   const layoutByPlayer = useRef(new Map<number, LayoutRectangle>());
   const [contentOffset, setContentOffset] = useState(0);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', (e) => {
+      setKeyboardVisible(true);
       const keyboardHeight = e.endCoordinates.height;
       if (!scrollViewLayout.current) {
         return;
@@ -67,6 +70,7 @@ export const Edition: React.FC = () => {
       }
     });
     const keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', (e) => {
+      setKeyboardVisible(false);
       LayoutAnimation.configureNext(LayoutAnimation.create(e.duration, LayoutAnimation.Types[e.easing]));
       setContentOffset(0);
     });
@@ -186,7 +190,7 @@ export const Edition: React.FC = () => {
           }
         />
         <WrapperAdd>
-          <CustomButton icon="account-plus" text="Ajouter joueur!" onPress={onPressAddPlayer} size="large" />
+          <CustomButton icon="account-plus" text="Ajouter joueur" onPress={onPressAddPlayer} size="large" />
         </WrapperAdd>
         <ScrollView
           ref={(ref) => (scrollViewRef.current = ref)}
@@ -199,7 +203,7 @@ export const Edition: React.FC = () => {
             scrollViewContentSize.current = height;
           }}
           style={{marginBottom: contentOffset, flexGrow: 1}}
-          keyboardShouldPersistTaps="handled"
+          keyboardShouldPersistTaps="never"
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
@@ -207,6 +211,9 @@ export const Edition: React.FC = () => {
           <BottomBar />
         </ScrollView>
       </Fragment>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <OverlayView style={{display: isKeyboardVisible ? 'flex' : 'none'}}></OverlayView>
+      </TouchableWithoutFeedback>
       {emojiPickerPlayer ? (
         <EmojiWrapper>
           <EmojiSelector
@@ -281,4 +288,14 @@ const EmojiWrapper = styled.View`
   z-index: 10;
   background-color: ${appBackgroundColor};
   padding: 40px 0 0 0;
+`;
+
+const OverlayView = styled.View`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: transparent;
 `;
