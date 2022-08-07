@@ -30,7 +30,7 @@ import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji
 export const Edition: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
-  const [emojiPickerPlayer, setEmojiPickerPlayer] = useState<Player | undefined>();
+  const [emojiPickerPlayer, setEmojiPickerPlayer] = useState<Player>();
 
   const scrollViewRef = useRef<ScrollView | null>();
   const scrollViewLayout = useRef<LayoutRectangle | null>();
@@ -162,6 +162,7 @@ export const Edition: React.FC = () => {
       </PlayerWrapper>
     );
   });
+
   return (
     <Fragment>
       <Fragment>
@@ -198,7 +199,6 @@ export const Edition: React.FC = () => {
             scrollViewContentSize.current = height;
           }}
           style={{marginBottom: contentOffset, flexGrow: 1}}
-          scrollEventThrottle={100}
           keyboardShouldPersistTaps="handled"
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
