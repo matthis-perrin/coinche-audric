@@ -28,8 +28,6 @@ const AppWithProvider: React.FC = () => {
     content = <Tirage />;
   } else if (app.currentPage === 'edition') {
     content = <Edition />;
-  } else if (app.currentPage === 'test') {
-    content = <Test />;
   }
 
   return (

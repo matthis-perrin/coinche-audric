@@ -27,10 +27,11 @@ import {
   appBackgroundColor,
 } from '../lib/theme';
 import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji} from '../lib/stores';
+import {sortPlayer} from '../lib/utilities';
+import {initialName} from '../lib/constants';
 
 export const Edition: React.FC = () => {
   const [app] = useApp();
-  const [players] = usePlayers();
   const [emojiPickerPlayer, setEmojiPickerPlayer] = useState<Player>();
 
   const scrollViewRef = useRef<ScrollView | null>();
@@ -86,7 +87,7 @@ export const Edition: React.FC = () => {
   };
 
   const onPressDeletePlayer = (p: Player): void => {
-    if (p.name !== `Nouveau joueur`) {
+    if (p.name !== initialName) {
       Alert.alert('Confirmation', `Voulez-vous supprimer ${p.name} ?`, [
         {
           text: 'Annuler',
@@ -118,20 +119,9 @@ export const Edition: React.FC = () => {
     player.name = text;
   };
 
-  const sortedPlayer = players.slice();
-  sortedPlayer.sort((p1, p2) => {
-    if (p1.name === `Nouveau joueur`) {
-      return -1;
-    } else if (p2.name === `Nouveau joueur`) {
-      return 1;
-    } else {
-      return p1.name.localeCompare(p2.name);
-    }
-  });
-
   const scrollViewContent: JSX.Element[] = [];
   let firstPlayer = true;
-  sortedPlayer.forEach((p) => {
+  sortPlayer().forEach((p) => {
     if (firstPlayer) {
       firstPlayer = false;
     } else {
@@ -203,7 +193,6 @@ export const Edition: React.FC = () => {
             scrollViewContentSize.current = height;
           }}
           style={{marginBottom: contentOffset, flexGrow: 1}}
-          keyboardShouldPersistTaps="never"
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >

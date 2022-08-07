@@ -1,7 +1,8 @@
 import {createDataStore, createPersistentDataStore} from './data_store';
+import {initialName, initialEmoji} from './constants';
 
 interface App {
-  currentPage: 'accueil' | 'tirage' | 'edition' | 'test';
+  currentPage: 'accueil' | 'tirage' | 'edition';
 }
 
 export interface Player {
@@ -15,9 +16,30 @@ export const getPlayers = playerDataStore.getData;
 export const setPlayers = playerDataStore.setData;
 export const usePlayers = playerDataStore.useData;
 
+const playerSelectedDataStore = createPersistentDataStore<Player[]>('players', []);
+export const getPlayersSelected = playerSelectedDataStore.getData;
+export const setPlayersSelected = playerSelectedDataStore.setData;
+export const usePlayersSelected = playerSelectedDataStore.useData;
+
 const appStore = createDataStore<App>({currentPage: 'accueil'});
 export const useApp = appStore.useData;
 export const setApp = appStore.setData;
+
+export const handlePlayerPress = (player: Player): void => {
+  if (getPlayersSelected().some((p) => p.id === player.id)) {
+    delPlayerSelected(player);
+  } else {
+    setPlayerSelected(player);
+  }
+};
+
+export const setPlayerSelected = (player: Player): void => {
+  setPlayersSelected([...getPlayersSelected(), player]);
+};
+
+export const delPlayerSelected = (player: Player): void => {
+  setPlayersSelected(getPlayersSelected().filter((p) => p.id !== player.id));
+};
 
 export const setPlayer = (player: Player): void => {
   setPlayers([...getPlayers(), player]);
@@ -70,8 +92,8 @@ export const addPlayer = (): void => {
   const newPlayer: Player = {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     id: Math.round(Math.random() * 1000000),
-    name: `Nouveau joueur`,
-    emoji: '💣',
+    name: initialName,
+    emoji: initialEmoji,
   };
   setPlayer(newPlayer);
 };

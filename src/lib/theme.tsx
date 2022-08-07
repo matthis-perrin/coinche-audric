@@ -16,6 +16,7 @@ export const keyboardColor = white;
 export const topBarColor = white;
 export const topBarBackgroundColor = primary;
 export const pastilleBackgroundColor = gray;
+export const pastilleSelectdBackgroundColor = '#F9AA33';
 export const pastilleColor = black;
 export const inputBackgroundColor = white;
 export const inputColor = black;

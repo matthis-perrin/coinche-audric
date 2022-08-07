@@ -20,7 +20,6 @@ export const Accueil: React.FC = () => {
           icon="dice-3"
           onPress={() => setApp({...app, currentPage: 'tirage'})}
         />
-        <CustomButton text="Test" size="large" icon="dice-3" onPress={() => setApp({...app, currentPage: 'test'})} />
       </WrapperAdd>
       <StyledScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <BottomBar />
