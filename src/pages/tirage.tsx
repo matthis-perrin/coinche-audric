@@ -21,7 +21,6 @@ import {useApp, setApp, handlePlayerPress, usePlayersSelected, getPlayersSelecte
 import {VerticalSpacing} from '../components/spacing';
 import {sortPlayer} from '../lib/utilities';
 import {TouchableWithoutFeedback} from 'react-native';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 export const Tirage: React.FC = () => {
   const [app] = useApp();
@@ -45,7 +44,7 @@ export const Tirage: React.FC = () => {
             <MaterialCommunityIcons
               key="icon"
               name="check-circle"
-              size={25}
+              size={buttonHeight.small}
               color={
                 getPlayersSelected().some((p1) => p1.id === p.id)
                   ? pastilleSelectdBackgroundColor

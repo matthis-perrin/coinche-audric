@@ -7,7 +7,6 @@ import {useApp} from './lib/stores';
 import {Accueil} from './pages/accueil';
 import {Tirage} from './pages/tirage';
 import {Edition} from './pages/edition';
-import {Test} from './pages/test';
 import {appBackgroundColor, topBarBackgroundColor} from './lib/theme';
 
 export const App: React.FC = () => (
