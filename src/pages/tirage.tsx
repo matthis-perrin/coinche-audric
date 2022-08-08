@@ -37,7 +37,7 @@ export const Tirage: React.FC = () => {
     }
     scrollViewContent.push(
       <TouchableWithoutFeedback onPress={() => handlePlayerPress(p)}>
-        <PlayerWrapper>
+        <PlayerWrapper key={p.id}>
           <PlayerEmoji>{p.emoji}</PlayerEmoji>
           <PlayerText>{p.name}</PlayerText>
           <WrapperIconCheck>
