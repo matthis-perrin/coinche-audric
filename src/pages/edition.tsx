@@ -26,12 +26,14 @@ import {
   pastilleBackgroundColor,
   appBackgroundColor,
 } from '../lib/theme';
-import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji} from '../lib/stores';
-import {sortPlayer} from '../lib/utilities';
+import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji, setPlayers} from '../lib/stores';
+import {sortPlayerByName} from '../lib/utilities';
 import {initialName} from '../lib/constants';
 
 export const Edition: React.FC = () => {
   const [app] = useApp();
+  const [players] = usePlayers();
+  let localPLayers = [...players];
   const [emojiPickerPlayer, setEmojiPickerPlayer] = useState<Player>();
 
   const scrollViewRef = useRef<ScrollView | null>();
@@ -74,6 +76,7 @@ export const Edition: React.FC = () => {
       setKeyboardVisible(false);
       LayoutAnimation.configureNext(LayoutAnimation.create(e.duration, LayoutAnimation.Types[e.easing]));
       setContentOffset(0);
+      setPlayers(localPLayers);
     });
 
     return () => {
@@ -117,15 +120,16 @@ export const Edition: React.FC = () => {
 
   const onTextChange = (text: string, player: Player): void => {
     player.name = text;
+    localPLayers = [...localPLayers, player];
   };
 
   const scrollViewContent: JSX.Element[] = [];
   let firstPlayer = true;
-  sortPlayer().forEach((p) => {
+  sortPlayerByName(players).forEach((p) => {
     if (firstPlayer) {
       firstPlayer = false;
     } else {
-      scrollViewContent.push(<VerticalSpacing height={spacing} />);
+      scrollViewContent.push(<VerticalSpacing key={p.id * p.id} height={spacing} />);
     }
     scrollViewContent.push(
       <PlayerWrapper

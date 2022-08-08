@@ -16,7 +16,7 @@ export const getPlayers = playerDataStore.getData;
 export const setPlayers = playerDataStore.setData;
 export const usePlayers = playerDataStore.useData;
 
-const playerSelectedDataStore = createPersistentDataStore<Player[]>('players', []);
+const playerSelectedDataStore = createPersistentDataStore<Player[]>('players_selected', []);
 export const getPlayersSelected = playerSelectedDataStore.getData;
 export const setPlayersSelected = playerSelectedDataStore.setData;
 export const usePlayersSelected = playerSelectedDataStore.useData;
@@ -69,7 +69,6 @@ export const delPlayer = (player: Player): void => {
     }
   }
   setPlayers(new_players);
-  // setPlayers(getPlayers().filter((p) => p.id !== player.id));
 };
 
 export const setPlayerEmoji = (text: string, player: Player): void => {
@@ -85,7 +84,6 @@ export const setPlayerEmoji = (text: string, player: Player): void => {
     }
   }
   setPlayers(new_players);
-  // setPlayers(getPlayers().map((p) => (p.id === player.id ? {...p, emoji: text} : p)));
 };
 
 export const addPlayer = (): void => {

@@ -15,29 +15,29 @@ import {
   inputBackgroundColor,
   buttonHeight,
   pastilleSelectdBackgroundColor,
-  white,
 } from '../lib/theme';
-import {useApp, setApp, handlePlayerPress, usePlayersSelected, getPlayersSelected} from '../lib/stores';
+import {useApp, setApp, handlePlayerPress, usePlayersSelected, getPlayersSelected, usePlayers} from '../lib/stores';
 import {VerticalSpacing} from '../components/spacing';
-import {sortPlayer} from '../lib/utilities';
+import {sortPlayerWithSelected} from '../lib/utilities';
 import {TouchableWithoutFeedback} from 'react-native';
 
 export const Tirage: React.FC = () => {
   const [app] = useApp();
+  const [players] = usePlayers();
   const [playersSelected] = usePlayersSelected();
 
   const handlePressTirage = () => void {};
   const scrollViewContent: JSX.Element[] = [];
   let firstPlayer = true;
-  sortPlayer().forEach((p) => {
+  sortPlayerWithSelected([...players], playersSelected).forEach((p) => {
     if (firstPlayer) {
       firstPlayer = false;
     } else {
-      scrollViewContent.push(<VerticalSpacing height={spacing} />);
+      scrollViewContent.push(<VerticalSpacing key={p.id * p.id * p.id} height={spacing} />);
     }
     scrollViewContent.push(
-      <TouchableWithoutFeedback onPress={() => handlePlayerPress(p)}>
-        <PlayerWrapper key={p.id}>
+      <TouchableWithoutFeedback key={p.id} onPress={() => handlePlayerPress(p)}>
+        <PlayerWrapper key={p.id * p.id}>
           <PlayerEmoji>{p.emoji}</PlayerEmoji>
           <PlayerText>{p.name}</PlayerText>
           <WrapperIconCheck>
