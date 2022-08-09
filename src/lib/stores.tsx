@@ -16,17 +16,17 @@ export const getPlayers = playerDataStore.getData;
 export const setPlayers = playerDataStore.setData;
 export const usePlayers = playerDataStore.useData;
 
-const playerSelectedDataStore = createPersistentDataStore<Player[]>('players_selected', []);
-export const getPlayersSelected = playerSelectedDataStore.getData;
-export const setPlayersSelected = playerSelectedDataStore.setData;
-export const usePlayersSelected = playerSelectedDataStore.useData;
+const playerSelectedIdDataStore = createPersistentDataStore<number[]>('players_selected', []);
+export const getPlayersSelectedId = playerSelectedIdDataStore.getData;
+export const setPlayersSelectedId = playerSelectedIdDataStore.setData;
+export const usePlayersSelectedId = playerSelectedIdDataStore.useData;
 
 const appStore = createDataStore<App>({currentPage: 'accueil'});
 export const useApp = appStore.useData;
 export const setApp = appStore.setData;
 
 export const handlePlayerPress = (player: Player): void => {
-  if (getPlayersSelected().some((p) => p.id === player.id)) {
+  if (getPlayersSelectedId().some((id) => id === player.id)) {
     delPlayerSelected(player);
   } else {
     setPlayerSelected(player);
@@ -34,11 +34,11 @@ export const handlePlayerPress = (player: Player): void => {
 };
 
 export const setPlayerSelected = (player: Player): void => {
-  setPlayersSelected([...getPlayersSelected(), player]);
+  setPlayersSelectedId([...getPlayersSelectedId(), player.id]);
 };
 
 export const delPlayerSelected = (player: Player): void => {
-  setPlayersSelected(getPlayersSelected().filter((p) => p.id !== player.id));
+  setPlayersSelectedId(getPlayersSelectedId().filter((id) => id !== player.id));
 };
 
 export const setPlayer = (player: Player): void => {

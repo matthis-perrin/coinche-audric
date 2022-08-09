@@ -16,7 +16,7 @@ import {
   buttonHeight,
   pastilleSelectdBackgroundColor,
 } from '../lib/theme';
-import {useApp, setApp, handlePlayerPress, usePlayersSelected, getPlayersSelected, usePlayers} from '../lib/stores';
+import {useApp, setApp, handlePlayerPress, usePlayers, getPlayersSelectedId, usePlayersSelectedId} from '../lib/stores';
 import {VerticalSpacing} from '../components/spacing';
 import {sortPlayerWithSelected} from '../lib/utilities';
 import {TouchableWithoutFeedback} from 'react-native';
@@ -24,7 +24,7 @@ import {TouchableWithoutFeedback} from 'react-native';
 export const Tirage: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
-  const [playersSelected] = usePlayersSelected();
+  const [playersSelected] = usePlayersSelectedId();
 
   const handlePressTirage = () => void {};
   const scrollViewContent: JSX.Element[] = [];
@@ -46,7 +46,7 @@ export const Tirage: React.FC = () => {
               name="check-circle"
               size={buttonHeight.small}
               color={
-                getPlayersSelected().some((p1) => p1.id === p.id)
+                getPlayersSelectedId().some((id) => id === p.id)
                   ? pastilleSelectdBackgroundColor
                   : pastilleBackgroundColor
               }

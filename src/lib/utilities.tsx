@@ -14,10 +14,9 @@ export const sortPlayerByName = (players: Player[]): Player[] => {
   return sortedPlayer;
 };
 
-export const sortPlayerWithSelected = (players: Player[], selectedPlayers: Player[]): Player[] => {
-  const selectedPlayerId = selectedPlayers.map((p) => p.id);
-  const notSelectedPlayers = players.filter((p) => !selectedPlayerId.includes(p.id));
-
+export const sortPlayerWithSelected = (players: Player[], selectedPlayersId: number[]): Player[] => {
+  const notSelectedPlayers = players.filter((p) => !selectedPlayersId.includes(p.id));
+  const selectedPlayers = players.filter((p) => selectedPlayersId.includes(p.id));
   const sortedSelectedPlayers = selectedPlayers.sort((p1, p2) => p1.name.localeCompare(p2.name));
   const sortedNotSelectedPlayers = notSelectedPlayers.sort((p1, p2) => p1.name.localeCompare(p2.name));
 

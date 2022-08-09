@@ -26,14 +26,24 @@ import {
   pastilleBackgroundColor,
   appBackgroundColor,
 } from '../lib/theme';
-import {useApp, setApp, addPlayer, usePlayers, Player, delPlayer, setPlayerEmoji, setPlayers} from '../lib/stores';
+import {
+  useApp,
+  setApp,
+  addPlayer,
+  usePlayers,
+  Player,
+  delPlayer,
+  setPlayerEmoji,
+  setPlayers,
+  getPlayers,
+} from '../lib/stores';
 import {sortPlayerByName} from '../lib/utilities';
 import {initialName} from '../lib/constants';
 
 export const Edition: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
-  let localPLayers = [...players];
+  let localPlayers: Player[] = [];
   const [emojiPickerPlayer, setEmojiPickerPlayer] = useState<Player>();
 
   const scrollViewRef = useRef<ScrollView | null>();
@@ -47,6 +57,7 @@ export const Edition: React.FC = () => {
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', (e) => {
       setKeyboardVisible(true);
+      localPlayers = [...getPlayers()];
       const keyboardHeight = e.endCoordinates.height;
       if (!scrollViewLayout.current) {
         return;
@@ -62,11 +73,14 @@ export const Edition: React.FC = () => {
           const targetScroll = inputLayout.y - idealInputPosition;
           const maxScroll = scrollViewContentSize.current - scrollViewLayout.current.height;
           const scrollAgainAfterRelayout = targetScroll > maxScroll;
-          LayoutAnimation.configureNext(LayoutAnimation.create(e.duration, LayoutAnimation.Types[e.easing]), () => {
-            if (scrollAgainAfterRelayout) {
-              scrollViewRef.current?.scrollTo({x: 0, y: targetScroll, animated: true});
+          LayoutAnimation.configureNext(
+            LayoutAnimation.create(e.duration, LayoutAnimation.Types[e.easing], LayoutAnimation.Properties.opacity),
+            () => {
+              if (scrollAgainAfterRelayout) {
+                scrollViewRef.current?.scrollTo({x: 0, y: targetScroll, animated: true});
+              }
             }
-          });
+          );
           setContentOffset(keyboardHeight);
           scrollViewRef.current?.scrollTo({x: 0, y: targetScroll, animated: true});
         }
@@ -74,9 +88,11 @@ export const Edition: React.FC = () => {
     });
     const keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', (e) => {
       setKeyboardVisible(false);
-      LayoutAnimation.configureNext(LayoutAnimation.create(e.duration, LayoutAnimation.Types[e.easing]));
+      LayoutAnimation.configureNext(
+        LayoutAnimation.create(250, LayoutAnimation.Types.linear, LayoutAnimation.Properties.opacity)
+      );
       setContentOffset(0);
-      setPlayers(localPLayers);
+      setPlayers(localPlayers);
     });
 
     return () => {
@@ -120,7 +136,16 @@ export const Edition: React.FC = () => {
 
   const onTextChange = (text: string, player: Player): void => {
     player.name = text;
-    localPLayers = [...localPLayers, player];
+    const current_players = getPlayers();
+    for (const p of current_players) {
+      if (p.id === player.id) {
+        const copy_p = {...p};
+        copy_p.name = text;
+        localPlayers.push(copy_p);
+      } else {
+        localPlayers.push(p);
+      }
+    }
   };
 
   const scrollViewContent: JSX.Element[] = [];
