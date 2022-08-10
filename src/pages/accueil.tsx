@@ -6,7 +6,7 @@ import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
 // import {clearPersistentDataStore} from '../lib/data_store';
 import {fontSizes, spacing, topBarColor} from '../lib/theme';
-import {useApp, setApp} from '../lib/stores';
+import {useApp, setApp} from '../lib/stores/app_store';
 
 export const Accueil: React.FC = () => {
   const [app] = useApp();

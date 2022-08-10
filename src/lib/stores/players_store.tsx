@@ -1,9 +1,5 @@
-import {createDataStore, createPersistentDataStore} from './data_store';
-import {initialName, initialEmoji} from './constants';
-
-interface App {
-  currentPage: 'accueil' | 'tirage' | 'edition';
-}
+import {createPersistentDataStore} from '../data_store';
+import {initialName, initialEmoji} from '../constants';
 
 export interface Player {
   id: number;
@@ -15,31 +11,6 @@ const playerDataStore = createPersistentDataStore<Player[]>('players', []);
 export const getPlayers = playerDataStore.getData;
 export const setPlayers = playerDataStore.setData;
 export const usePlayers = playerDataStore.useData;
-
-const playerSelectedIdDataStore = createPersistentDataStore<number[]>('players_selected', []);
-export const getPlayersSelectedId = playerSelectedIdDataStore.getData;
-export const setPlayersSelectedId = playerSelectedIdDataStore.setData;
-export const usePlayersSelectedId = playerSelectedIdDataStore.useData;
-
-const appStore = createDataStore<App>({currentPage: 'accueil'});
-export const useApp = appStore.useData;
-export const setApp = appStore.setData;
-
-export const handlePlayerPress = (player: Player): void => {
-  if (getPlayersSelectedId().some((id) => id === player.id)) {
-    delPlayerSelected(player);
-  } else {
-    setPlayerSelected(player);
-  }
-};
-
-export const setPlayerSelected = (player: Player): void => {
-  setPlayersSelectedId([...getPlayersSelectedId(), player.id]);
-};
-
-export const delPlayerSelected = (player: Player): void => {
-  setPlayersSelectedId(getPlayersSelectedId().filter((id) => id !== player.id));
-};
 
 export const setPlayer = (player: Player): void => {
   setPlayers([...getPlayers(), player]);

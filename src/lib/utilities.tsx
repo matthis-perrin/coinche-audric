@@ -1,25 +1,30 @@
-import {Player} from './stores';
+import {getPlayers, Player} from './stores/players_store';
+import {getPlayersSelectedId} from './stores/selected_players_store.tsx';
 
-export const sortPlayerByName = (players: Player[]): Player[] => {
+export const getSortedNotSelectedPlayers = (): Player[] => {
+  const notSelectedPlayers = getPlayers().filter((p) => !getPlayersSelectedId().includes(p.id));
+  return sortPlayerByName(notSelectedPlayers);
+};
+
+export const getSortedSelectedPlayers = (): Player[] => {
+  const selectedPlayers = getPlayers().filter((p) => getPlayersSelectedId().includes(p.id));
+  return sortPlayerByName(selectedPlayers);
+};
+
+export const getSortedPlayers = (): Player[] => {
+  return sortPlayerByName(getPlayers());
+};
+
+export const sortPlayerByName = (players: Player[], name_to_exclude?: string): Player[] => {
   const sortedPlayer = players.slice();
   sortedPlayer.sort((p1, p2) => {
-    if (p1.name === `Nouveau joueur`) {
+    if (p1.name === name_to_exclude) {
       return -1;
-    } else if (p2.name === `Nouveau joueur`) {
+    } else if (p2.name === name_to_exclude) {
       return 1;
     } else {
       return p1.name.localeCompare(p2.name);
     }
   });
   return sortedPlayer;
-};
-
-export const sortPlayerWithSelected = (players: Player[], selectedPlayersId: number[]): Player[] => {
-  const notSelectedPlayers = players.filter((p) => !selectedPlayersId.includes(p.id));
-  const selectedPlayers = players.filter((p) => selectedPlayersId.includes(p.id));
-  const sortedSelectedPlayers = selectedPlayers.sort((p1, p2) => p1.name.localeCompare(p2.name));
-  const sortedNotSelectedPlayers = notSelectedPlayers.sort((p1, p2) => p1.name.localeCompare(p2.name));
-
-  const newPlayers = [...sortedSelectedPlayers, ...sortedNotSelectedPlayers];
-  return newPlayers;
 };

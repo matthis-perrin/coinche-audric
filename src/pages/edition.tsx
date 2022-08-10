@@ -26,19 +26,18 @@ import {
   pastilleBackgroundColor,
   appBackgroundColor,
 } from '../lib/theme';
+import {useApp, setApp} from '../lib/stores/app_store';
+import {getSortedPlayers, sortPlayerByName} from '../lib/utilities';
+import {initialName} from '../lib/constants';
 import {
-  useApp,
-  setApp,
   addPlayer,
-  usePlayers,
-  Player,
   delPlayer,
+  getPlayers,
+  Player,
   setPlayerEmoji,
   setPlayers,
-  getPlayers,
-} from '../lib/stores';
-import {sortPlayerByName} from '../lib/utilities';
-import {initialName} from '../lib/constants';
+  usePlayers,
+} from '../lib/stores/players_store';
 
 export const Edition: React.FC = () => {
   const [app] = useApp();
@@ -150,7 +149,7 @@ export const Edition: React.FC = () => {
 
   const scrollViewContent: JSX.Element[] = [];
   let firstPlayer = true;
-  sortPlayerByName(players).forEach((p) => {
+  getSortedPlayers().forEach((p) => {
     if (firstPlayer) {
       firstPlayer = false;
     } else {

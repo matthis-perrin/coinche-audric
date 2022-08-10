@@ -3,9 +3,9 @@ import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
-import {useApp} from './lib/stores';
+import {useApp} from './lib/stores/app_store';
 import {Accueil} from './pages/accueil';
-import {Tirage} from './pages/tirage';
+import {Selection} from './pages/selection';
 import {Edition} from './pages/edition';
 import {appBackgroundColor, topBarBackgroundColor} from './lib/theme';
 
@@ -24,7 +24,7 @@ const AppWithProvider: React.FC = () => {
   if (app.currentPage === 'accueil') {
     content = <Accueil />;
   } else if (app.currentPage === 'tirage') {
-    content = <Tirage />;
+    content = <Selection />;
   } else if (app.currentPage === 'edition') {
     content = <Edition />;
   }
