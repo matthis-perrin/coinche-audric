@@ -1,7 +1,7 @@
 import {createDataStore} from '../data_store';
 
 interface App {
-  currentPage: 'accueil' | 'tirage' | 'edition';
+  currentPage: 'accueil' | 'tirage' | 'edition' | 'selection';
 }
 
 const appStore = createDataStore<App>({currentPage: 'accueil'});

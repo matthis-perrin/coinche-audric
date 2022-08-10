@@ -5,19 +5,10 @@ import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
-import {
-  fontSizes,
-  spacing,
-  topBarColor,
-  topBarButtonWidth,
-  pastilleBackgroundColor,
-  buttonHeight,
-  pastilleSelectdBackgroundColor,
-} from '../lib/theme';
+import {fontSizes, spacing, topBarColor, topBarButtonWidth} from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
 import {VerticalSpacing} from '../components/spacing';
-import {TouchableWithoutFeedback} from 'react-native';
-import {getPlayersSelectedId, handlePlayerPress, usePlayersSelectedId} from '../lib/stores/selected_players_store.tsx';
+import {usePlayersSelectedId} from '../lib/stores/selected_players_store.tsx';
 import {getSortedNotSelectedPlayers, getSortedSelectedPlayers} from '../lib/utilities';
 import {SelectablePlayer} from '../components/selectable_player';
 import {usePlayers} from '../lib/stores/players_store';
@@ -27,7 +18,6 @@ export const Selection: React.FC = () => {
   const [players] = usePlayers();
   const [PlayersSelectedId] = usePlayersSelectedId();
 
-  const handlePressTirage = () => void {};
   const scrollViewContent: JSX.Element[] = [];
   let firstPlayer = true;
   getSortedSelectedPlayers().forEach((p) => {
@@ -77,10 +67,10 @@ export const Selection: React.FC = () => {
       </StyledScrollView>
       <WrapperBottomButton>
         <CustomButton
-          text="Tirage au sort des équipes"
+          text="Lancer le tirage"
           icon="dice-3"
           size="large"
-          onPress={() => handlePressTirage()}
+          onPress={() => setApp({...app, currentPage: 'tirage'})}
         />
       </WrapperBottomButton>
       <BottomBar />

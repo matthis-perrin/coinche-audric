@@ -7,18 +7,20 @@ import {TopBar} from '../components/top_bar';
 // import {clearPersistentDataStore} from '../lib/data_store';
 import {fontSizes, spacing, topBarColor} from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
+import {setPlayersSelectedId} from '../lib/stores/selected_players_store.tsx';
 
 export const Accueil: React.FC = () => {
   const [app] = useApp();
+  setPlayersSelectedId([]);
   return (
     <Fragment>
       <TopBar middle={<Titre>Accueil</Titre>} />
       <WrapperAdd>
         <CustomButton
-          text="Tirage des équipes"
+          text="Tirer des équipes au hasard"
           size="large"
           icon="dice-3"
-          onPress={() => setApp({...app, currentPage: 'tirage'})}
+          onPress={() => setApp({...app, currentPage: 'selection'})}
         />
       </WrapperAdd>
       <StyledScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>

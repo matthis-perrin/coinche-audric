@@ -200,9 +200,9 @@ export const Edition: React.FC = () => {
           middle={<Titre>{`Edition`}</Titre>}
           right={
             <CustomButton
-              text="Tirage"
-              icon="dice-3"
-              onPress={() => setApp({...app, currentPage: 'tirage'})}
+              text="Selection"
+              icon="account-check-outline"
+              onPress={() => setApp({...app, currentPage: 'selection'})}
               width={topBarButtonWidth}
             />
           }

@@ -8,6 +8,7 @@ import {Accueil} from './pages/accueil';
 import {Selection} from './pages/selection';
 import {Edition} from './pages/edition';
 import {appBackgroundColor, topBarBackgroundColor} from './lib/theme';
+import {Tirage} from './pages/tirage';
 
 export const App: React.FC = () => (
   <SafeAreaProvider>
@@ -23,10 +24,12 @@ const AppWithProvider: React.FC = () => {
   let content = <Fragment />;
   if (app.currentPage === 'accueil') {
     content = <Accueil />;
-  } else if (app.currentPage === 'tirage') {
+  } else if (app.currentPage === 'selection') {
     content = <Selection />;
   } else if (app.currentPage === 'edition') {
     content = <Edition />;
+  } else if (app.currentPage === 'tirage') {
+    content = <Tirage />;
   }
 
   return (
