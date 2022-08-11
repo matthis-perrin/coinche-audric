@@ -23,6 +23,7 @@ import {useApp, setApp} from '../lib/stores/app_store';
 import {getRandomTeams} from '../lib/utilities';
 import {SelectablePlayer} from '../components/selectable_player';
 import {VerticalSpacing} from '../components/spacing';
+import {Text} from 'react-native';
 
 export const Tirage: React.FC = () => {
   const [app] = useApp();
@@ -40,7 +41,11 @@ export const Tirage: React.FC = () => {
     } else {
       scrollViewContent.push(<VerticalSpacing key={team.id} height={spacing * 2} />);
     }
-    scrollViewContent.push(<WrapperTeamText>{`Equipe ${[team.id]}`}</WrapperTeamText>);
+    scrollViewContent.push(
+      <WrapperTeamText>
+        <TeamText>{`Equipe ${[team.id]}`}</TeamText>
+      </WrapperTeamText>
+    );
     team.players.forEach((p) => {
       scrollViewContent.push(<VerticalSpacing key={p.id * p.id} height={spacing} />);
       scrollViewContent.push(
@@ -120,13 +125,21 @@ const PlayerText = styled.Text`
   line-height: ${buttonHeight.medium}px;
 `;
 
-const WrapperTeamText = styled.Text`
+const WrapperTeamText = styled.View`
   flex-grow: 1;
+  border-radius: ${borderRadius * 2}px;
   line-height: ${buttonHeight.medium}px;
   font-size: ${fontSizes.medium}px;
   height: ${buttonHeight.medium}px;
   padding-left: ${spacing}px;
-  background-color: ${black};
+  padding-right: ${spacing}px;
+  background-color: ${primary};
+`;
+
+const TeamText = styled.Text`
+  flex-shrink: 1;
+  line-height: ${buttonHeight.medium}px;
+  font-size: ${fontSizes.medium}px;
   color: ${white};
 `;
 

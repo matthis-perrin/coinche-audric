@@ -1,6 +1,6 @@
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
 import styled from 'styled-components/native';
 
 import {
@@ -24,6 +24,7 @@ interface CustomButtonProps {
   iconSizeRatio?: number;
   hidden?: boolean;
   keyboardStyle?: boolean;
+  style?: ViewStyle;
 }
 
 export const CustomButton: React.FC<CustomButtonProps> = (props) => {
@@ -67,6 +68,7 @@ export const CustomButton: React.FC<CustomButtonProps> = (props) => {
           height,
           width,
           backgroundColor: props.keyboardStyle ? keyboardBackgroundColor : buttonBackgroundColor,
+          ...props.style,
         }}
       >
         {buttonContent}
