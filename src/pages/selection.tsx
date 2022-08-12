@@ -32,6 +32,12 @@ export const Selection: React.FC = () => {
   const [numberOfTeams, setnumberOfTeams] = useState(2);
 
   const scrollViewContent: JSX.Element[] = [];
+  const handelMinusPress = (): void => {
+    setnumberOfTeams(numberOfTeams - 1);
+  };
+  const handelPlusPress = (): void => {
+    setnumberOfTeams(numberOfTeams + 1);
+  };
   let firstPlayer = true;
   getSortedSelectedPlayers().forEach((p) => {
     if (firstPlayer) {
@@ -78,23 +84,15 @@ export const Selection: React.FC = () => {
       <WrapperNumberOfTeam>
         <TitreNumberOfTeam>Nombre d'équipe</TitreNumberOfTeam>
         <ButtonWrapper>
-          <TouchableOpacity
-            onPress={() => setApp({...app, currentPage: 'tirage'})}
-            activeOpacity={0.7}
-            disabled={false}
-          >
+          <TouchableOpacity onPress={() => handelMinusPress()} activeOpacity={0.7} disabled={numberOfTeams <= 2}>
             <WrapperIcon>
               <MaterialCommunityIcons key="icon" name="minus-circle" size={fontSizes.medium} color={primary} />
             </WrapperIcon>
           </TouchableOpacity>
           <WrapperTextNumberOfTeams>
-            <TextNumberOfTeams>2</TextNumberOfTeams>
+            <TextNumberOfTeams>{numberOfTeams}</TextNumberOfTeams>
           </WrapperTextNumberOfTeams>
-          <TouchableOpacity
-            onPress={() => setApp({...app, currentPage: 'tirage'})}
-            activeOpacity={0.7}
-            disabled={false}
-          >
+          <TouchableOpacity onPress={() => handelPlusPress()} activeOpacity={0.7} disabled={false}>
             <WrapperIcon>
               <MaterialCommunityIcons key="icon" name="plus-circle" size={fontSizes.medium} color={primary} />
             </WrapperIcon>
