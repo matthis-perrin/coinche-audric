@@ -16,11 +16,17 @@ import {getPlayersSelectedId, handlePlayerPress} from '../lib/stores/selected_pl
 
 interface SelectablePlayerProps {
   player: Player;
+  onSelected: () => void;
 }
 
 export const SelectablePlayer: React.FC<SelectablePlayerProps> = (props) => {
   return (
-    <TouchableWithoutFeedback onPress={() => handlePlayerPress(props.player)}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        props.onSelected();
+        handlePlayerPress(props.player);
+      }}
+    >
       <PlayerWrapper>
         <PlayerEmoji>{props.player.emoji}</PlayerEmoji>
         <PlayerText>{props.player.name}</PlayerText>

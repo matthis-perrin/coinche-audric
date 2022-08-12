@@ -23,33 +23,31 @@ import {useApp, setApp} from '../lib/stores/app_store';
 import {getRandomTeams} from '../lib/utilities';
 import {SelectablePlayer} from '../components/selectable_player';
 import {VerticalSpacing} from '../components/spacing';
-import {Text} from 'react-native';
+import {LayoutAnimation, Text} from 'react-native';
 
 export const Tirage: React.FC = () => {
   const [app] = useApp();
   const [teams, setTeams] = useState(getRandomTeams());
 
   const handlePressTirage = (): void => {
+    LayoutAnimation.easeInEaseOut();
     setTeams(getRandomTeams());
   };
 
   const scrollViewContent: JSX.Element[] = [];
-  let first_team = true;
-  teams.forEach((team) => {
-    if (first_team) {
-      first_team = false;
-    } else {
-      scrollViewContent.push(<VerticalSpacing key={team.id} height={spacing * 2} />);
+  teams.forEach((team, i) => {
+    if (i !== 0) {
+      scrollViewContent.push(<VerticalSpacing key={`spacing-${team.id}`} height={spacing * 2} />);
     }
     scrollViewContent.push(
-      <WrapperTeamText>
+      <WrapperTeamText key={team.id}>
         <TeamText>{`Equipe ${[team.id]}`}</TeamText>
       </WrapperTeamText>
     );
     team.players.forEach((p) => {
-      scrollViewContent.push(<VerticalSpacing key={p.id * p.id} height={spacing} />);
+      scrollViewContent.push(<VerticalSpacing key={`spacing-${p.id}`} height={spacing} />);
       scrollViewContent.push(
-        <PlayerWrapper>
+        <PlayerWrapper key={p.id}>
           <PlayerEmoji>{p.emoji}</PlayerEmoji>
           <PlayerText>{p.name}</PlayerText>
         </PlayerWrapper>

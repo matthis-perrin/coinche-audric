@@ -1,5 +1,5 @@
 import {MaterialCommunityIcons} from '@expo/vector-icons';
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useCallback, useState} from 'react';
 import styled from 'styled-components/native';
 
 import {BottomBar} from '../components/bottom_bar';
@@ -23,7 +23,7 @@ import {usePlayersSelectedId} from '../lib/stores/selected_players_store.tsx';
 import {getSortedNotSelectedPlayers, getSortedSelectedPlayers} from '../lib/utilities';
 import {SelectablePlayer} from '../components/selectable_player';
 import {usePlayers} from '../lib/stores/players_store';
-import {TouchableOpacity, View} from 'react-native';
+import {LayoutAnimation, TouchableOpacity, View} from 'react-native';
 
 export const Selection: React.FC = () => {
   const [app] = useApp();
@@ -38,6 +38,9 @@ export const Selection: React.FC = () => {
   const handelPlusPress = (): void => {
     setnumberOfTeams(numberOfTeams + 1);
   };
+  const handleSelected = useCallback(() => {
+    LayoutAnimation.easeInEaseOut();
+  }, []);
   let firstPlayer = true;
   getSortedSelectedPlayers().forEach((p) => {
     if (firstPlayer) {
@@ -45,7 +48,7 @@ export const Selection: React.FC = () => {
     } else {
       scrollViewContent.push(<VerticalSpacing key={p.id * p.id} height={spacing} />);
     }
-    scrollViewContent.push(<SelectablePlayer player={p} key={p.id}></SelectablePlayer>);
+    scrollViewContent.push(<SelectablePlayer player={p} key={p.id} onSelected={handleSelected}></SelectablePlayer>);
   });
   if (getSortedSelectedPlayers().length > 0) {
     scrollViewContent.push(<VerticalSpacing key={'selected_separator'} height={spacing * 2} />);
@@ -57,7 +60,7 @@ export const Selection: React.FC = () => {
     } else {
       scrollViewContent.push(<VerticalSpacing key={p.id * p.id} height={spacing} />);
     }
-    scrollViewContent.push(<SelectablePlayer player={p} key={p.id}></SelectablePlayer>);
+    scrollViewContent.push(<SelectablePlayer player={p} key={p.id} onSelected={handleSelected}></SelectablePlayer>);
   });
 
   return (
