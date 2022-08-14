@@ -29,14 +29,14 @@ export const Selection: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
   const [PlayersSelectedId] = usePlayersSelectedId();
-  const [numberOfTeams, setnumberOfTeams] = useState(2);
+  // const [numberOfTeams, setnumberOfTeams] = useState(2);
 
   const scrollViewContent: JSX.Element[] = [];
   const handelMinusPress = (): void => {
-    setnumberOfTeams(numberOfTeams - 1);
+    setApp({...app, numberOfTeams: app.numberOfTeams - 1});
   };
   const handelPlusPress = (): void => {
-    setnumberOfTeams(numberOfTeams + 1);
+    setApp({...app, numberOfTeams: app.numberOfTeams + 1});
   };
   const handleSelected = useCallback(() => {
     LayoutAnimation.easeInEaseOut();
@@ -87,13 +87,13 @@ export const Selection: React.FC = () => {
       <WrapperNumberOfTeam>
         <TitreNumberOfTeam>Nombre d'équipe</TitreNumberOfTeam>
         <ButtonWrapper>
-          <TouchableOpacity onPress={() => handelMinusPress()} activeOpacity={0.7} disabled={numberOfTeams <= 2}>
+          <TouchableOpacity onPress={() => handelMinusPress()} activeOpacity={0.7} disabled={app.numberOfTeams <= 2}>
             <WrapperIcon>
               <MaterialCommunityIcons key="icon" name="minus-circle" size={fontSizes.medium} color={primary} />
             </WrapperIcon>
           </TouchableOpacity>
           <WrapperTextNumberOfTeams>
-            <TextNumberOfTeams>{numberOfTeams}</TextNumberOfTeams>
+            <TextNumberOfTeams>{app.numberOfTeams}</TextNumberOfTeams>
           </WrapperTextNumberOfTeams>
           <TouchableOpacity onPress={() => handelPlusPress()} activeOpacity={0.7} disabled={false}>
             <WrapperIcon>
@@ -146,6 +146,7 @@ const WrapperNumberOfTeam = styled.View`
   flex-direction: row;
   flex-shrink: 0;
   background-color: ${primary};
+  padding-right: ${spacing}px;
 `;
 
 const TitreNumberOfTeam = styled.Text`

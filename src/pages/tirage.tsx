@@ -21,27 +21,27 @@ import {
 } from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
 import {getRandomTeams} from '../lib/utilities';
-import {SelectablePlayer} from '../components/selectable_player';
 import {VerticalSpacing} from '../components/spacing';
-import {LayoutAnimation, Text} from 'react-native';
+import {LayoutAnimation} from 'react-native';
 
 export const Tirage: React.FC = () => {
   const [app] = useApp();
-  const [teams, setTeams] = useState(getRandomTeams());
+  const [teams, setTeams] = useState(getRandomTeams(app.numberOfTeams));
 
   const handlePressTirage = (): void => {
     LayoutAnimation.easeInEaseOut();
-    setTeams(getRandomTeams());
+    setTeams(getRandomTeams(app.numberOfTeams));
   };
 
   const scrollViewContent: JSX.Element[] = [];
+  let index = 1;
   teams.forEach((team, i) => {
     if (i !== 0) {
       scrollViewContent.push(<VerticalSpacing key={`spacing-${team.id}`} height={spacing * 2} />);
     }
     scrollViewContent.push(
       <WrapperTeamText key={team.id}>
-        <TeamText>{`Equipe ${[team.id]}`}</TeamText>
+        <TeamText>{`Equipe ${[index]}`}</TeamText>
       </WrapperTeamText>
     );
     team.players.forEach((p) => {
@@ -53,6 +53,7 @@ export const Tirage: React.FC = () => {
         </PlayerWrapper>
       );
     });
+    index++;
   });
 
   return (

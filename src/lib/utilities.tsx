@@ -6,20 +6,20 @@ interface Team {
   players: Player[];
 }
 
-export const getRandomTeams = (): Team[] => {
-  const team1: Team = {id: 1, players: []};
-  const team2: Team = {id: 2, players: []};
+export const getRandomTeams = (numberOfTeams: number): Team[] => {
+  const teams: Team[] = [];
+  for (let index = 0; index < numberOfTeams; index++) {
+    const team: Team = {id: index, players: []};
+    teams.push(team);
+  }
   let localSelectedPlayers = getSortedSelectedPlayers();
   while (localSelectedPlayers.length > 0) {
     const randomPlayer = localSelectedPlayers[Math.floor(Math.random() * localSelectedPlayers.length)];
-    if (team1.players.length <= team2.players.length) {
-      team1.players.push(randomPlayer);
-    } else {
-      team2.players.push(randomPlayer);
-    }
+    teams.sort((t1, t2) => t1.players.length - t2.players.length);
+    teams[0].players.push(randomPlayer);
     localSelectedPlayers = localSelectedPlayers.filter((p) => p.id !== randomPlayer.id);
   }
-  return [team1, team2];
+  return teams;
 };
 
 export const getSortedNotSelectedPlayers = (): Player[] => {
