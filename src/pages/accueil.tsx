@@ -8,10 +8,11 @@ import {TopBar} from '../components/top_bar';
 import {fontSizes, spacing, topBarColor} from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
 import {setPlayersSelectedId} from '../lib/stores/selected_players_store.tsx';
+import {VerticalSpacing} from '../components/spacing';
 
 export const Accueil: React.FC = () => {
   const [app] = useApp();
-  setPlayersSelectedId([]);
+  // setPlayersSelectedId([]);
   return (
     <Fragment>
       <TopBar middle={<Titre>Accueil</Titre>} />
@@ -21,6 +22,15 @@ export const Accueil: React.FC = () => {
           size="large"
           icon="dice-3"
           onPress={() => setApp({...app, currentPage: 'selection'})}
+        />
+      </WrapperAdd>
+      <VerticalSpacing key={'Spacing_1'} height={spacing} />
+      <WrapperAdd>
+        <CustomButton
+          text="Coinche"
+          size="large"
+          icon="cards-playing-heart-multiple-outline"
+          onPress={() => setApp({...app, currentPage: 'games_selection'})}
         />
       </WrapperAdd>
       <StyledScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>

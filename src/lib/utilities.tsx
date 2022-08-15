@@ -1,7 +1,7 @@
 import {getPlayers, Player} from './stores/players_store';
 import {getPlayersSelectedId} from './stores/selected_players_store.tsx';
 
-interface Team {
+export interface Team {
   id: number;
   players: Player[];
 }

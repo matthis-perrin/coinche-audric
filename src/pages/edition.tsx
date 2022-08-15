@@ -189,19 +189,11 @@ export const Edition: React.FC = () => {
     <Fragment>
       <Fragment>
         <TopBar
+          middle={<Titre>{`Edition`}</Titre>}
           left={
             <CustomButton
-              text="Accueil"
-              icon="home"
-              onPress={() => setApp({...app, currentPage: 'accueil'})}
-              width={topBarButtonWidth}
-            />
-          }
-          middle={<Titre>{`Edition`}</Titre>}
-          right={
-            <CustomButton
-              text="Selection"
-              icon="account-check-outline"
+              text="Retour"
+              icon="arrow-left"
               onPress={() => setApp({...app, currentPage: 'selection'})}
               width={topBarButtonWidth}
             />
@@ -258,6 +250,7 @@ const Titre = styled.Text`
   flex-grow: 1;
   text-align: center;
   color: ${topBarColor};
+  margin-right: ${topBarButtonWidth}px;
 `;
 
 const WrapperAdd = styled.View`

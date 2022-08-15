@@ -13,11 +13,8 @@ import {
   pastilleBackgroundColor,
   inputBackgroundColor,
   buttonHeight,
-  pLight,
-  secondary,
   white,
   primary,
-  black,
 } from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
 import {getRandomTeams} from '../lib/utilities';
@@ -59,19 +56,11 @@ export const Tirage: React.FC = () => {
   return (
     <Fragment>
       <TopBar
+        middle={<Titre>{`Tirage`}</Titre>}
         left={
           <CustomButton
-            text="Accueil"
-            icon="home"
-            onPress={() => setApp({...app, currentPage: 'accueil'})}
-            width={topBarButtonWidth}
-          />
-        }
-        middle={<Titre>{`Tirage`}</Titre>}
-        right={
-          <CustomButton
-            text="Selection"
-            icon="account-check-outline"
+            text="Retour"
+            icon="arrow-left"
             onPress={() => setApp({...app, currentPage: 'selection'})}
             width={topBarButtonWidth}
           />
@@ -94,6 +83,7 @@ const Titre = styled.Text`
   flex-grow: 1;
   text-align: center;
   color: ${topBarColor};
+  margin-right: ${topBarButtonWidth}px;
 `;
 
 const PlayerWrapper = styled.View`

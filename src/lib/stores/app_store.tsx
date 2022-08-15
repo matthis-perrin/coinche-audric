@@ -1,7 +1,7 @@
 import {createDataStore} from '../data_store';
 
 interface App {
-  currentPage: 'accueil' | 'tirage' | 'edition' | 'selection';
+  currentPage: 'accueil' | 'tirage' | 'edition' | 'selection' | 'games_selection';
   numberOfTeams: number;
 }
 

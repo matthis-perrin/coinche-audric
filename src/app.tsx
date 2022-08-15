@@ -9,6 +9,7 @@ import {Selection} from './pages/selection';
 import {Edition} from './pages/edition';
 import {appBackgroundColor, topBarBackgroundColor} from './lib/theme';
 import {Tirage} from './pages/tirage';
+import {GamesSelection} from './pages/games_selection';
 
 export const App: React.FC = () => (
   <SafeAreaProvider>
@@ -30,6 +31,8 @@ const AppWithProvider: React.FC = () => {
     content = <Edition />;
   } else if (app.currentPage === 'tirage') {
     content = <Tirage />;
+  } else if (app.currentPage === 'games_selection') {
+    content = <GamesSelection />;
   }
 
   return (

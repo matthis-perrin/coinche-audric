@@ -11,7 +11,6 @@ import {
   topBarColor,
   topBarButtonWidth,
   primary,
-  topBarBackgroundColor,
   white,
   buttonHeight,
   borderRadius,
