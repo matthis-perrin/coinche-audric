@@ -10,20 +10,29 @@ import {useApp, setApp} from '../lib/stores/app_store';
 import {VerticalSpacing} from '../components/spacing';
 import {getRandomTeams} from '../lib/utilities';
 import {addGame, useGames} from '../lib/stores/games_store';
+import {SelectableGame} from '../components/selectable_game';
+import {ScrollView} from 'react-native';
 
 export const GamesSelection: React.FC = () => {
   const [app] = useApp();
   const [games] = useGames();
-  console.log(games);
 
   const handleAddGamePress = (): void => {
     addGame(getRandomTeams(2));
   };
 
-  const handledelGamePress = (): void => {
-    clearPersistentDataStore('games');
-  };
-
+  const scrollViewContent: JSX.Element[] = [];
+  if (games) {
+    let firstPlayer = true;
+    games.forEach((game) => {
+      if (firstPlayer) {
+        firstPlayer = false;
+      } else {
+        scrollViewContent.push(<VerticalSpacing key={'spacing_game_' + game.id} height={spacing} />);
+      }
+      scrollViewContent.push(<SelectableGame game={game} key={game.id} />);
+    });
+  }
   return (
     <Fragment>
       <TopBar
@@ -39,21 +48,16 @@ export const GamesSelection: React.FC = () => {
       />
       <WrapperAdd>
         <CustomButton
-          text="Ajouter une partie"
+          text="Démarrer une nouvelle partie"
           size="large"
           icon="cards-playing-heart-multiple-outline"
           onPress={() => handleAddGamePress()}
         />
       </WrapperAdd>
-      <VerticalSpacing key={'Spacing_1'} height={spacing} />
-      <WrapperAdd>
-        <CustomButton
-          text="Supprimer les parties"
-          size="large"
-          icon="delete-forever"
-          onPress={() => handledelGamePress()}
-        />
-      </WrapperAdd>
+      <VerticalSpacing key={'spacing_game_scrollView'} height={spacing} />
+      <StyledScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+        {scrollViewContent}
+      </StyledScrollView>
       <BottomBar />
     </Fragment>
   );
@@ -71,4 +75,10 @@ const Titre = styled.Text`
 const WrapperAdd = styled.View`
   margin: 0 ${spacing}px;
   flex-shrink: 0;
+`;
+
+const StyledScrollView = styled.ScrollView`
+  flex-grow: 1;
+  margin: ${spacing}px;
+  margin-top: 0;
 `;
