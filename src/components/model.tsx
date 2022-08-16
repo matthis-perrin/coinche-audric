@@ -1,12 +1,17 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 interface ModelNameProps {}
 
 export const ModelName: React.FC<ModelNameProps> = (props) => {
+  //______________ STORE & STATE ______________
+
+  //______________ FUNCTIONS ______________
   const functionModel = (): void => {};
+  //______________ HTML ______________
   return <ModelComponent></ModelComponent>;
 };
 
 ModelName.displayName = 'ModelName';
 
-const ModelComponent = styled.view``;
+//______________ CSS ______________
+const ModelComponent = styled.View``;

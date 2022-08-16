@@ -1,3 +1,5 @@
+import {useApp} from './stores/app_store';
+import {Game, getGames} from './stores/games_store';
 import {getPlayers, Player} from './stores/players_store';
 import {getPlayersSelectedId} from './stores/selected_players_store.tsx';
 
@@ -48,4 +50,8 @@ export const sortPlayerByName = (players: Player[], name_to_exclude?: string): P
     }
   });
   return sortedPlayer;
+};
+
+export const getGameWithId = (id: number): Game[] => {
+  return getGames().filter((g) => g.id === id);
 };

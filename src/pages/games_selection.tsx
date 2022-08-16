@@ -4,14 +4,12 @@ import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
-import {clearPersistentDataStore} from '../lib/data_store';
 import {fontSizes, spacing, topBarButtonWidth, topBarColor} from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
 import {VerticalSpacing} from '../components/spacing';
 import {getRandomTeams} from '../lib/utilities';
 import {addGame, useGames} from '../lib/stores/games_store';
 import {SelectableGame} from '../components/selectable_game';
-import {ScrollView} from 'react-native';
 
 export const GamesSelection: React.FC = () => {
   const [app] = useApp();
