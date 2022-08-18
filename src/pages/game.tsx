@@ -2,11 +2,14 @@ import {Fragment} from 'react';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
+import {SelectableGame} from '../components/selectable_game';
 import {HorizontalSpacing, VerticalSpacing} from '../components/spacing';
 import {TopBar} from '../components/top_bar';
 import {setApp, useApp} from '../lib/stores/app_store';
 import {
   black,
+  gray,
+  darkgray,
   borderRadius,
   buttonHeight,
   fontSizes,
@@ -14,6 +17,7 @@ import {
   spacing,
   topBarButtonWidth,
   topBarColor,
+  pLight,
 } from '../lib/theme';
 import {getGameWithId} from '../lib/utilities';
 
@@ -28,6 +32,7 @@ export const Game: React.FC = () => {
   if (!app.currentGameId) {
     return <Fragment></Fragment>;
   }
+  const scrollViewContent: JSX.Element[] = [];
 
   //______________ HTML ______________
   return (
@@ -43,27 +48,37 @@ export const Game: React.FC = () => {
         }
         middle={<Titre>Partie</Titre>}
       />
-      <WrapperScore>
-        <WrapperScoreTeam1>
-          <Team1Wrapper>
-            <Team1EmojiPlayer1>{getGameWithId(app.currentGameId)[0].teams[0].players[0].emoji}</Team1EmojiPlayer1>
-            <Team1EmojiPlayer2>{getGameWithId(app.currentGameId)[0].teams[0].players[1].emoji}</Team1EmojiPlayer2>
-          </Team1Wrapper>
-        </WrapperScoreTeam1>
-        <HorizontalSpacing
-          key={'spacing_game_score1'}
-          width={spacing}
-          style={{borderRightColor: black, borderRightWidth: 1}}
-        />
-        <HorizontalSpacing key={'spacing_game_score2'} width={spacing} />
-        <WrapperScoreTeam2>
-          <Team2Wrapper>
-            <Team2EmojiPlayer1>{getGameWithId(app.currentGameId)[0].teams[1].players[0].emoji}</Team2EmojiPlayer1>
-            <Team2EmojiPlayer2>{getGameWithId(app.currentGameId)[0].teams[1].players[1].emoji}</Team2EmojiPlayer2>
-          </Team2Wrapper>
-        </WrapperScoreTeam2>
-      </WrapperScore>
-      <VerticalSpacing key={'spacing_game_score'} height={spacing} />
+      <WrapperContent>
+        <LineTeamsWrapper>
+          <TeamsWrapper>
+            <TeamWrapper>
+              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[0].emoji}</TeamEmojiPlayer>
+              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[1].emoji}</TeamEmojiPlayer>
+            </TeamWrapper>
+          </TeamsWrapper>
+          <HorizontalSpacing key={'spacing_game_score2'} width={spacing / 2} />
+          <TeamsWrapper>
+            <TeamWrapper>
+              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[0].emoji}</TeamEmojiPlayer>
+              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[1].emoji}</TeamEmojiPlayer>
+            </TeamWrapper>
+          </TeamsWrapper>
+        </LineTeamsWrapper>
+        <VerticalSpacing height={spacing / 2} />
+        <LineScoresWrapper>
+          <ScoresWrapper>
+            <ScoreWrapper>0</ScoreWrapper>
+          </ScoresWrapper>
+          <HorizontalSpacing key={'spacing_game_score2'} width={spacing / 2} />
+          <ScoresWrapper>
+            <ScoreWrapper>999</ScoreWrapper>
+          </ScoresWrapper>
+        </LineScoresWrapper>
+        <VerticalSpacing height={spacing} />
+        <StyledScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+          {scrollViewContent}
+        </StyledScrollView>
+      </WrapperContent>
       <WrapperAdd>
         <CustomButton
           text="Ajouter une mène"
@@ -94,77 +109,80 @@ const Titre = styled.Text`
 const GlobalWrapper = styled.View`
   display: flex;
   flex-direction: column;
-  background-color: red;
+  height: 100%;
+  overflow: hidden;
 `;
 
-const WrapperScore = styled.View`
-  flex-direction: row;
-  justify-content: space-evenly;
-  margin: 0 ${spacing}px;
-  padding: ${spacing}px;
-  border-radius: ${borderRadius * 2}px;
+const WrapperContent = styled.View`
+  display: flex;
+  flex-direction: column;
+  height: 0;
+  flex-grow: 1;
   background-color: ${pastilleBackgroundColor};
-`;
-
-//______________ TEAM1 ______________
-const WrapperScoreTeam1 = styled.View`
-  flex-direction: column;
-  background-color: green;
-  align-items: center;
-  flex-grow: 1;
-`;
-
-const Team1Wrapper = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  background-color: purple;
-`;
-const Team1EmojiPlayer1 = styled.Text`
-  font-size: ${fontSizes.extraLarge}px;
-  height: ${buttonHeight.medium}px;
-  width: ${buttonHeight.medium}px;
-  text-align: center;
-  line-height: ${buttonHeight.medium}px;
-`;
-const Team1EmojiPlayer2 = styled.Text`
-  font-size: ${fontSizes.extraLarge}px;
-  height: ${buttonHeight.medium}px;
-  width: ${buttonHeight.medium}px;
-  text-align: center;
-  line-height: ${buttonHeight.medium}px;
-`;
-
-//______________ TEAM2 ______________
-const WrapperScoreTeam2 = styled.View`
-  flex-direction: column;
-  flex-grow: 1;
-  align-items: center;
-  background-color: yellow;
-`;
-
-const Team2Wrapper = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  background-color: pink;
-`;
-const Team2EmojiPlayer1 = styled.Text`
-  font-size: ${fontSizes.extraLarge}px;
-  height: ${buttonHeight.medium}px;
-  width: ${buttonHeight.medium}px;
-  text-align: center;
-  line-height: ${buttonHeight.medium}px;
-`;
-const Team2EmojiPlayer2 = styled.Text`
-  font-size: ${fontSizes.extraLarge}px;
-  height: ${buttonHeight.medium}px;
-  width: ${buttonHeight.medium}px;
-  text-align: center;
-  line-height: ${buttonHeight.medium}px;
+  border-radius: ${borderRadius * 2};
+  margin: ${spacing}px;
+  margin-top: 0;
+  padding: ${spacing}px;
+  overflow: hidden;
 `;
 
 const WrapperAdd = styled.View`
   margin: 0 ${spacing}px;
   flex-shrink: 0;
+`;
+
+//______________ TEAM ______________
+const LineTeamsWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
+  background-color: ${pastilleBackgroundColor};
+`;
+const TeamsWrapper = styled.View`
+  flex-direction: column;
+  background-color: ${darkgray};
+  align-items: center;
+  flex-grow: 1;
+`;
+
+const TeamWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+`;
+
+const TeamEmojiPlayer = styled.Text`
+  font-size: ${fontSizes.extraLarge}px;
+  height: ${buttonHeight.medium}px;
+  width: ${buttonHeight.medium}px;
+  text-align: center;
+  line-height: ${buttonHeight.medium}px;
+`;
+
+//______________ SCORE ______________
+const LineScoresWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
+  background-color: ${pastilleBackgroundColor};
+`;
+const ScoresWrapper = styled.View`
+  flex-direction: column;
+  background-color: ${pLight};
+  align-items: center;
+  width: 0;
+  flex-grow: 1;
+`;
+
+const ScoreWrapper = styled.Text`
+  font-size: ${fontSizes.extraLarge}px;
+  height: ${buttonHeight.medium}px;
+  flex-grow: 1;
+  text-align: center;
+  line-height: ${buttonHeight.medium}px;
+  color: white;
+`;
+
+//______________ DETAIL SCORE ______________
+const StyledScrollView = styled.ScrollView`
+  background-color: white;
+  flex-grow: 1;
 `;
