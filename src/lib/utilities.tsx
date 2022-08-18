@@ -1,5 +1,4 @@
-import {useApp} from './stores/app_store';
-import {Game, getGames} from './stores/games_store';
+import {Game, getGames, Round} from './stores/games_store';
 import {getPlayers, Player} from './stores/players_store';
 import {getPlayersSelectedId} from './stores/selected_players_store.tsx';
 
@@ -54,4 +53,55 @@ export const sortPlayerByName = (players: Player[], name_to_exclude?: string): P
 
 export const getGameWithId = (id: number): Game[] => {
   return getGames().filter((g) => g.id === id);
+};
+
+export const getScoreWithId = (id: number): number[] => {
+  const scores: number[] = [0, 0];
+  const game = getGames().filter((g) => g.id === id);
+  game[0].rounds.forEach((r) => {
+    const current_score = getscoreWithRound(r);
+    scores[0] = scores[0] + current_score[0];
+    scores[1] = scores[1] + current_score[1];
+  });
+  return scores;
+};
+
+export const getscoreWithRound = (r: Round): number[] => {
+  const scores: number[] = [0, 0];
+  if (r.taker_team_index === 0 || r.taker_team_index === 1) {
+    let current_score = 0;
+    if (r.successful === 'oui') {
+      if (r.coinche) {
+        current_score = r.annonce * 2;
+      } else if (r.surcoinche) {
+        current_score = r.annonce * 4;
+      } else {
+        current_score = r.annonce;
+      }
+      scores[r.taker_team_index] = current_score;
+    } else if (r.successful === 'non') {
+      if (r.coinche) {
+        if (r.annonce <= 160) {
+          current_score = 160 * 2;
+        } else {
+          current_score = r.annonce * 2;
+        }
+      } else if (r.surcoinche) {
+        if (r.annonce <= 160) {
+          current_score = 160 * 4;
+        } else {
+          current_score = r.annonce * 4;
+        }
+      } else {
+        if (r.annonce <= 160) {
+          current_score = 160;
+        } else {
+          current_score = r.annonce;
+        }
+      }
+      const index = r.taker_team_index === 0 ? 1 : 0;
+      scores[index] = current_score;
+    }
+  }
+  return scores;
 };

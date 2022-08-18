@@ -4,7 +4,7 @@ import {getGameWithId, Team} from '../utilities';
 export interface Round {
   id: number;
   taker_team_index?: number;
-  annonce?: 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 250 | 500;
+  annonce: number;
   coinche: boolean;
   surcoinche: boolean;
   successful: '?' | 'oui' | 'non';
@@ -46,21 +46,35 @@ export const delGame = (game: Game): void => {
   setGames(new_games);
 };
 
-export const delRound = (game: Game): void => {
-  game.rounds.pop();
-  setGame(game);
+export const addRound = (round: Round | undefined, gameId: number | undefined): void => {
+  if (round && gameId) {
+    const current_games = getGames();
+    const current_game = getGameWithId(gameId)[0];
+    const new_games: Game[] = [];
+    for (const g of current_games) {
+      if (g.id === current_game.id) {
+        const copy_g = {...g};
+        copy_g.rounds.push(round);
+        new_games.push(copy_g);
+      } else {
+        new_games.push(g);
+      }
+    }
+    setGames(new_games);
+  }
 };
 
 export const getInitialRound = (gameId?: number): Round | undefined => {
   if (!gameId) {
     return;
   }
-  const currentGame = getGameWithId(gameId)[0];
-  const newRound: Round = {
-    id: currentGame.rounds.length,
+  const new_round: Round = {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    id: Math.round(Math.random() * 1000000),
     coinche: false,
     surcoinche: false,
     successful: '?',
+    annonce: 0,
   };
-  return newRound;
+  return new_round;
 };
