@@ -4,7 +4,6 @@ import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
-// import {clearPersistentDataStore} from '../lib/data_store';
 import {fontSizes, spacing, topBarColor} from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
 import {setPlayersSelectedId} from '../lib/stores/selected_players_store.tsx';
@@ -12,7 +11,6 @@ import {VerticalSpacing} from '../components/spacing';
 
 export const Accueil: React.FC = () => {
   const [app] = useApp();
-  // setPlayersSelectedId([]);
   return (
     <Fragment>
       <TopBar middle={<Titre>Accueil</Titre>} />

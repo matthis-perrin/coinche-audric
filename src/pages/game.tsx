@@ -2,13 +2,10 @@ import {Fragment} from 'react';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
-import {SelectableGame} from '../components/selectable_game';
 import {HorizontalSpacing, VerticalSpacing} from '../components/spacing';
 import {TopBar} from '../components/top_bar';
 import {setApp, useApp} from '../lib/stores/app_store';
 import {
-  black,
-  gray,
   darkgray,
   borderRadius,
   buttonHeight,
@@ -26,7 +23,6 @@ export const Game: React.FC = () => {
   const [app] = useApp();
 
   //______________ FUNCTIONS ______________
-  const handleAddRoundPress = (): void => {};
 
   //______________ INIT ______________
   if (!app.currentGameId) {
@@ -56,7 +52,7 @@ export const Game: React.FC = () => {
               <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[1].emoji}</TeamEmojiPlayer>
             </TeamWrapper>
           </TeamsWrapper>
-          <HorizontalSpacing key={'spacing_game_score2'} width={spacing / 2} />
+          <HorizontalSpacing width={spacing / 2} />
           <TeamsWrapper>
             <TeamWrapper>
               <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[0].emoji}</TeamEmojiPlayer>
@@ -69,7 +65,7 @@ export const Game: React.FC = () => {
           <ScoresWrapper>
             <ScoreWrapper>0</ScoreWrapper>
           </ScoresWrapper>
-          <HorizontalSpacing key={'spacing_game_score2'} width={spacing / 2} />
+          <HorizontalSpacing width={spacing / 2} />
           <ScoresWrapper>
             <ScoreWrapper>999</ScoreWrapper>
           </ScoresWrapper>
@@ -84,7 +80,7 @@ export const Game: React.FC = () => {
           text="Ajouter une mène"
           size="large"
           icon="plus-circle-outline"
-          onPress={() => handleAddRoundPress()}
+          onPress={() => setApp({...app, currentPage: 'round'})}
         />
       </WrapperAdd>
       <BottomBar />

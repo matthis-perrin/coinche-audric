@@ -1,13 +1,13 @@
 import {createPersistentDataStore} from '../data_store';
-import {Team} from '../utilities';
+import {getGameWithId, Team} from '../utilities';
 
 export interface Round {
   id: number;
-  taker_team_id: number;
-  annonce: 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 250 | 500;
+  taker_team_index?: number;
+  annonce?: 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 250 | 500;
   coinche: boolean;
   surcoinche: boolean;
-  successful: boolean;
+  successful: '?' | 'oui' | 'non';
 }
 
 export interface Game {
@@ -46,27 +46,21 @@ export const delGame = (game: Game): void => {
   setGames(new_games);
 };
 
-export const addRound = (
-  game: Game,
-  taker_team_id: number,
-  annonce: 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 250 | 500,
-  coinche: boolean,
-  surcoinche: boolean,
-  successful: boolean
-): void => {
-  const newRound: Round = {
-    id: game.rounds.length,
-    taker_team_id: taker_team_id,
-    annonce: annonce,
-    coinche: coinche,
-    surcoinche: surcoinche,
-    successful: successful,
-  };
-  game.rounds.push(newRound);
-  setGame(game);
-};
-
 export const delRound = (game: Game): void => {
   game.rounds.pop();
   setGame(game);
+};
+
+export const getInitialRound = (gameId?: number): Round | undefined => {
+  if (!gameId) {
+    return;
+  }
+  const currentGame = getGameWithId(gameId)[0];
+  const newRound: Round = {
+    id: currentGame.rounds.length,
+    coinche: false,
+    surcoinche: false,
+    successful: '?',
+  };
+  return newRound;
 };

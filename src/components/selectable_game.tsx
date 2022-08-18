@@ -18,7 +18,6 @@ export const SelectableGame: React.FC<SelectableGameProps> = (props) => {
     delGame(props.game);
   };
   const handleGamePress = (): void => {
-    console.log('handleGamePress2');
     const new_app = {...app};
     new_app.currentGameId = props.game.id;
     new_app.currentPage = 'game';

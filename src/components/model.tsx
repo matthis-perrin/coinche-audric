@@ -7,6 +7,7 @@ export const ModelName: React.FC<ModelNameProps> = (props) => {
 
   //______________ FUNCTIONS ______________
   const functionModel = (): void => {};
+
   //______________ HTML ______________
   return <ModelComponent></ModelComponent>;
 };
