@@ -1,5 +1,4 @@
 import {Fragment} from 'react';
-import {Button, ScrollView, Text} from 'react-native';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
@@ -30,9 +29,6 @@ export const Game: React.FC = () => {
     return <Fragment></Fragment>;
   }
 
-  const score1 = 10000080;
-  const score2 = 900;
-
   //______________ HTML ______________
   return (
     <GlobalWrapper>
@@ -47,38 +43,27 @@ export const Game: React.FC = () => {
         }
         middle={<Titre>Partie</Titre>}
       />
-      <WrapperContent>
-        <WrapperScore>
-          <WrapperScoreTeam>
-            <TeamWrapper>
-              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[0].emoji}</TeamEmojiPlayer>
-              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[1].emoji}</TeamEmojiPlayer>
-            </TeamWrapper>
-            <TeamScore style={{fontWeight: score1 > score2 ? '600' : '300'}}>{score1.toLocaleString()}</TeamScore>
-          </WrapperScoreTeam>
-          <Sep />
-          <WrapperScoreTeam>
-            <TeamWrapper>
-              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[0].emoji}</TeamEmojiPlayer>
-              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[1].emoji}</TeamEmojiPlayer>
-            </TeamWrapper>
-            <TeamScore style={{fontWeight: score1 < score2 ? '600' : '300'}}>{score2.toLocaleString()}</TeamScore>
-          </WrapperScoreTeam>
-        </WrapperScore>
-        <DetailScoreScrollView bounces={false} showsVerticalScrollIndicator={false}>
-          {[...new Array(40)].map(() => (
-            <ScoreLine>
-              <ScoreLineSide>
-                <Text>0</Text>
-              </ScoreLineSide>
-              <Sep />
-              <ScoreLineSide>
-                <Text>90</Text>
-              </ScoreLineSide>
-            </ScoreLine>
-          ))}
-        </DetailScoreScrollView>
-      </WrapperContent>
+      <WrapperScore>
+        <WrapperScoreTeam1>
+          <Team1Wrapper>
+            <Team1EmojiPlayer1>{getGameWithId(app.currentGameId)[0].teams[0].players[0].emoji}</Team1EmojiPlayer1>
+            <Team1EmojiPlayer2>{getGameWithId(app.currentGameId)[0].teams[0].players[1].emoji}</Team1EmojiPlayer2>
+          </Team1Wrapper>
+        </WrapperScoreTeam1>
+        <HorizontalSpacing
+          key={'spacing_game_score1'}
+          width={spacing}
+          style={{borderRightColor: black, borderRightWidth: 1}}
+        />
+        <HorizontalSpacing key={'spacing_game_score2'} width={spacing} />
+        <WrapperScoreTeam2>
+          <Team2Wrapper>
+            <Team2EmojiPlayer1>{getGameWithId(app.currentGameId)[0].teams[1].players[0].emoji}</Team2EmojiPlayer1>
+            <Team2EmojiPlayer2>{getGameWithId(app.currentGameId)[0].teams[1].players[1].emoji}</Team2EmojiPlayer2>
+          </Team2Wrapper>
+        </WrapperScoreTeam2>
+      </WrapperScore>
+      <VerticalSpacing key={'spacing_game_score'} height={spacing} />
       <WrapperAdd>
         <CustomButton
           text="Ajouter une mène"
@@ -109,31 +94,40 @@ const Titre = styled.Text`
 const GlobalWrapper = styled.View`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow: hidden;
+  background-color: red;
 `;
 
 const WrapperScore = styled.View`
   flex-direction: row;
+  justify-content: space-evenly;
+  margin: 0 ${spacing}px;
+  padding: ${spacing}px;
+  border-radius: ${borderRadius * 2}px;
   background-color: ${pastilleBackgroundColor};
 `;
 
-//______________ TEAM ______________
-const WrapperScoreTeam = styled.View`
+//______________ TEAM1 ______________
+const WrapperScoreTeam1 = styled.View`
   flex-direction: column;
   background-color: green;
   align-items: center;
-  width: 0;
   flex-grow: 1;
 `;
 
-const TeamWrapper = styled.View`
+const Team1Wrapper = styled.View`
   display: flex;
   flex-direction: row;
   align-content: center;
   background-color: purple;
 `;
-const TeamEmojiPlayer = styled.Text`
+const Team1EmojiPlayer1 = styled.Text`
+  font-size: ${fontSizes.extraLarge}px;
+  height: ${buttonHeight.medium}px;
+  width: ${buttonHeight.medium}px;
+  text-align: center;
+  line-height: ${buttonHeight.medium}px;
+`;
+const Team1EmojiPlayer2 = styled.Text`
   font-size: ${fontSizes.extraLarge}px;
   height: ${buttonHeight.medium}px;
   width: ${buttonHeight.medium}px;
@@ -141,49 +135,36 @@ const TeamEmojiPlayer = styled.Text`
   line-height: ${buttonHeight.medium}px;
 `;
 
-//
-
-const DetailScoreScrollView = styled.ScrollView`
-  background-color: orange;
-  flex-grow: 1;
-`;
-
-const ScoreLine = styled.View`
-  flex-direction: row;
-  justify-content: space-evenly;
-  background-color: white;
-`;
-
-const ScoreLineSide = styled.View`
-  padding: ${spacing}px;
-  width: 0;
-  flex-grow: 1;
-`;
-
-const Sep = styled.View`
-  flex-shrink: 0;
-  flex-grow: 0;
-  width: 1px;
-  background-color: black;
-  margin: 0 ${spacing}px;
-`;
-
-const WrapperContent = styled.View`
-  display: flex;
+//______________ TEAM2 ______________
+const WrapperScoreTeam2 = styled.View`
   flex-direction: column;
-  height: 0;
   flex-grow: 1;
-  background-color: blue;
-  border-radius: ${borderRadius * 2};
-  margin: ${spacing}px;
-  margin-top: 0;
-  padding: ${spacing}px;
-  overflow: hidden; /* Overflow = dépassement ; hidden = caché ; Permet de cacher tout ce qui dépasse, notament ce qui va par dessus les border radius */
+  align-items: center;
+  background-color: yellow;
+`;
+
+const Team2Wrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  background-color: pink;
+`;
+const Team2EmojiPlayer1 = styled.Text`
+  font-size: ${fontSizes.extraLarge}px;
+  height: ${buttonHeight.medium}px;
+  width: ${buttonHeight.medium}px;
+  text-align: center;
+  line-height: ${buttonHeight.medium}px;
+`;
+const Team2EmojiPlayer2 = styled.Text`
+  font-size: ${fontSizes.extraLarge}px;
+  height: ${buttonHeight.medium}px;
+  width: ${buttonHeight.medium}px;
+  text-align: center;
+  line-height: ${buttonHeight.medium}px;
 `;
 
 const WrapperAdd = styled.View`
   margin: 0 ${spacing}px;
   flex-shrink: 0;
 `;
-
-const TeamScore = styled.Text``;
