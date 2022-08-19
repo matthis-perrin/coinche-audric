@@ -3,6 +3,7 @@
 //
 export const primary = '#344955';
 export const pLight = '#5f7481';
+export const pVeryLight = '#F0F2F4';
 export const secondary = '#F9AA33';
 export const darkgray = '#bbbbbb';
 export const gray = '#ededed';
@@ -25,11 +26,12 @@ export const inputColor = black;
 export const bannerBackgroundColor = pLight;
 export const bannerColor = white;
 export const borderColor = primary;
+export const borderColorGame = darkgray;
 
 //
 // UI constants
 //
-export const fontSizes = {small: 12, medium: 18, large: 22, extraLarge: 26};
+export const fontSizes = {small: 12, medium: 18, large: 22, extraLarge: 26, xxl: 30, xxxl: 34};
 export const buttonHeight = {small: 30, medium: 40, large: 48, extraLarge: 60};
 export const borderRadius = 4;
 export const topBarButtonWidth = 120;

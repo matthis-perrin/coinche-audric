@@ -2,7 +2,16 @@ import {Alert, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
 import {setApp, useApp} from '../lib/stores/app_store';
 import {delGame, Game} from '../lib/stores/games_store';
-import {black, borderRadius, buttonHeight, fontSizes, pastilleBackgroundColor, spacing} from '../lib/theme';
+import {
+  black,
+  borderColorGame,
+  borderRadius,
+  buttonHeight,
+  fontSizes,
+  pastilleBackgroundColor,
+  spacing,
+  white,
+} from '../lib/theme';
 import {getScoreWithId} from '../lib/utilities';
 import {CustomButton} from './custom_buttons';
 import {HorizontalSpacing} from './spacing';
@@ -49,11 +58,22 @@ export const SelectableGame: React.FC<SelectableGameProps> = (props) => {
             <TeamEmojiPlayer>{props.game.teams[0].players[1].emoji}</TeamEmojiPlayer>
           </TeamWrapper>
           <ScoresWrapper>
-            <ScoreWrapper>{getScoreWithId(props.game.id)[0].toLocaleString()}</ScoreWrapper>
+            <ScoreWrapper
+              style={{
+                fontWeight: getScoreWithId(props.game.id)[0] > getScoreWithId(props.game.id)[1] ? '600' : '300',
+              }}
+            >
+              {getScoreWithId(props.game.id)[0].toLocaleString()}
+            </ScoreWrapper>
           </ScoresWrapper>
-          <HorizontalSpacing width={spacing / 2} />
           <ScoresWrapper>
-            <ScoreWrapper>{getScoreWithId(props.game.id)[1].toLocaleString()}</ScoreWrapper>
+            <ScoreWrapper
+              style={{
+                fontWeight: getScoreWithId(props.game.id)[1] > getScoreWithId(props.game.id)[0] ? '600' : '300',
+              }}
+            >
+              {getScoreWithId(props.game.id)[1].toLocaleString()}
+            </ScoreWrapper>
           </ScoresWrapper>
           <TeamWrapper>
             <TeamEmojiPlayer>{props.game.teams[1].players[0].emoji}</TeamEmojiPlayer>
@@ -116,7 +136,7 @@ const TeamEmojiPlayer = styled.Text`
 //______________ SCORE ______________
 const ScoresWrapper = styled.View`
   flex-direction: column;
-  background-color: ${black};
+  background-color: ${white};
   align-items: center;
   width: 0;
   flex-grow: 1;
@@ -128,5 +148,5 @@ const ScoreWrapper = styled.Text`
   flex-grow: 1;
   text-align: center;
   line-height: ${buttonHeight.medium}px;
-  color: white;
+  color: ${black};
 `;

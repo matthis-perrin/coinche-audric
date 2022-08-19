@@ -22,6 +22,9 @@ import {
   gray,
   white,
   black,
+  primary,
+  pVeryLight,
+  borderColorGame,
 } from '../lib/theme';
 import {getScoreWithId, getscoreWithRound} from '../lib/utilities';
 
@@ -62,20 +65,33 @@ export const Game: React.FC = () => {
       current_score[1] = current_score[1] + current_round_score[1];
       scrollViewContent.push(
         <WrapperLineScore key={r.id}>
-          <LineScore0
-            key={'LineScore0' + r.id}
-            style={{backgroundColor: i % 2 === 0 ? gray : white}}
-          >{`+ ${current_round_score[0]}`}</LineScore0>
-          <LineScoreTotal0 key={'LineScoreTotal0' + r.id} style={{backgroundColor: i % 2 === 0 ? gray : white}}>
-            {current_score[0]}
+          <LineScoreTotal0
+            key={'LineScoreTotal0' + r.id}
+            style={{
+              backgroundColor: i % 2 === 0 ? pVeryLight : white,
+              fontWeight: current_score[0] > current_score[1] ? '600' : '300',
+            }}
+          >
+            {current_score[0].toLocaleString()}
           </LineScoreTotal0>
-          <LineScoreTotal1 key={'LineScoreTotal1' + r.id} style={{backgroundColor: i % 2 === 0 ? gray : white}}>
-            {current_score[1]}
+          <LineScore0 key={'LineScore0' + r.id} style={{backgroundColor: i % 2 === 0 ? pVeryLight : white}}>
+            {current_round_score[0] > 0 ? `+ ${current_round_score[0]}` : `-`}
+          </LineScore0>
+          <LineIndexMene key={'index' + r.id} style={{backgroundColor: i % 2 === 0 ? pVeryLight : white}}>
+            {i + 1}
+          </LineIndexMene>
+          <LineScore1 key={'LineScore1' + r.id} style={{backgroundColor: i % 2 === 0 ? pVeryLight : white}}>
+            {current_round_score[1] > 0 ? `+ ${current_round_score[1]}` : `-`}
+          </LineScore1>
+          <LineScoreTotal1
+            key={'LineScoreTotal1' + r.id}
+            style={{
+              backgroundColor: i % 2 === 0 ? pVeryLight : white,
+              fontWeight: current_score[1] > current_score[0] ? '600' : '300',
+            }}
+          >
+            {current_score[1].toLocaleString()}
           </LineScoreTotal1>
-          <LineScore1
-            key={'LineScore1' + r.id}
-            style={{backgroundColor: i % 2 === 0 ? gray : white}}
-          >{`+ ${current_round_score[1]}`}</LineScore1>
         </WrapperLineScore>
       );
       i++;
@@ -113,7 +129,7 @@ export const Game: React.FC = () => {
               <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[1].emoji}</TeamEmojiPlayer>
             </TeamWrapper>
           </TeamsWrapper>
-          <HorizontalSpacing width={spacing / 2} />
+          <HorizontalSpacing width={spacing} />
           <TeamsWrapper>
             <TeamWrapper>
               <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[0].emoji}</TeamEmojiPlayer>
@@ -121,17 +137,28 @@ export const Game: React.FC = () => {
             </TeamWrapper>
           </TeamsWrapper>
         </LineTeamsWrapper>
-        <VerticalSpacing height={spacing / 2} />
         <LineScoresWrapper>
           <ScoresWrapper>
-            <ScoreWrapper>{getScoreWithId(app.currentGameId)[0].toLocaleString()}</ScoreWrapper>
+            <ScoreWrapper
+              style={{
+                fontWeight: getScoreWithId(app.currentGameId)[0] > getScoreWithId(app.currentGameId)[1] ? '600' : '300',
+              }}
+            >
+              {getScoreWithId(app.currentGameId)[0].toLocaleString()}
+            </ScoreWrapper>
           </ScoresWrapper>
-          <HorizontalSpacing width={spacing / 2} />
+          <HorizontalSpacing width={spacing} />
           <ScoresWrapper>
-            <ScoreWrapper>{getScoreWithId(app.currentGameId)[1].toLocaleString()}</ScoreWrapper>
+            <ScoreWrapper
+              style={{
+                fontWeight: getScoreWithId(app.currentGameId)[1] > getScoreWithId(app.currentGameId)[0] ? '600' : '300',
+              }}
+            >
+              {getScoreWithId(app.currentGameId)[1].toLocaleString()}
+            </ScoreWrapper>
           </ScoresWrapper>
         </LineScoresWrapper>
-        <VerticalSpacing height={spacing / 2} />
+        <VerticalSpacing height={spacing} />
         <StyledScrollView
           ref={scrollViewRef}
           showsHorizontalScrollIndicator={false}
@@ -179,11 +206,11 @@ const WrapperContent = styled.View`
   flex-direction: column;
   height: 0;
   flex-grow: 1;
-  background-color: ${pLight};
+  background-color: ${gray};
   border-radius: ${borderRadius * 2}px;
   margin: ${spacing}px;
   margin-top: 0;
-  padding: ${spacing / 2}px;
+  padding: ${spacing}px;
   overflow: hidden;
 `;
 
@@ -196,13 +223,22 @@ const WrapperAdd = styled.View`
 const LineTeamsWrapper = styled.View`
   flex-direction: row;
   justify-content: space-evenly;
-  background-color: ${pLight};
+  background-color: ${gray};
 `;
 const TeamsWrapper = styled.View`
   flex-direction: column;
-  background-color: white;
+  background-color: ${white};
   align-items: center;
   flex-grow: 1;
+  border-top-style: solid;
+  border-top-color: ${borderColorGame};
+  border-top-width: 1px;
+  border-right-style: solid;
+  border-right-color: ${borderColorGame};
+  border-right-width: 1px;
+  border-left-style: solid;
+  border-left-color: ${borderColorGame};
+  border-left-width: 1px;
 `;
 
 const TeamWrapper = styled.View`
@@ -223,28 +259,38 @@ const TeamEmojiPlayer = styled.Text`
 const LineScoresWrapper = styled.View`
   flex-direction: row;
   justify-content: space-evenly;
-  background-color: ${pLight};
+  background-color: ${gray};
 `;
 const ScoresWrapper = styled.View`
   flex-direction: column;
-  background-color: ${black};
+  background-color: ${white};
   align-items: center;
   width: 0;
   flex-grow: 1;
+  border-bottom-style: solid;
+  border-bottom-color: ${borderColorGame};
+  border-bottom-width: 1px;
+  border-right-style: solid;
+  border-right-color: ${borderColorGame};
+  border-right-width: 1px;
+  border-left-style: solid;
+  border-left-color: ${borderColorGame};
+  border-left-width: 1px;
 `;
 
 const ScoreWrapper = styled.Text`
-  font-size: ${fontSizes.extraLarge}px;
+  font-size: ${fontSizes.xxl}px;
   height: ${buttonHeight.medium}px;
   flex-grow: 1;
   text-align: center;
   line-height: ${buttonHeight.medium}px;
-  color: white;
+  color: ${black};
 `;
 
 //______________ DETAIL SCORE ______________
 const StyledScrollView = styled.ScrollView`
   background-color: white;
+  border: solid 1px ${borderColorGame};
   flex-grow: 1;
 `;
 
@@ -259,9 +305,10 @@ const LineScore0 = styled.Text`
   flex-grow: 1;
   font-size: ${fontSizes.medium}px;
   height: ${buttonHeight.medium}px;
-  text-align: left;
+  text-align: right;
   line-height: ${buttonHeight.medium}px;
-  padding-left: ${spacing}px;
+  padding-right: ${spacing * 2}px;
+  color: ${pLight};
 `;
 
 const LineScoreTotal0 = styled.Text`
@@ -269,9 +316,10 @@ const LineScoreTotal0 = styled.Text`
   flex-grow: 1;
   font-size: ${fontSizes.medium}px;
   height: ${buttonHeight.medium}px;
-  text-align: right;
+  text-align: left;
   line-height: ${buttonHeight.medium}px;
-  padding-right: ${spacing}px;
+  padding-left: ${spacing * 2}px;
+  color: ${black};
 `;
 
 const LineScore1 = styled.Text`
@@ -279,9 +327,10 @@ const LineScore1 = styled.Text`
   flex-grow: 1;
   font-size: ${fontSizes.medium}px;
   height: ${buttonHeight.medium}px;
-  text-align: right;
+  text-align: left;
   line-height: ${buttonHeight.medium}px;
-  padding-right: ${spacing}px;
+  padding-left: ${spacing * 2}px;
+  color: ${pLight};
 `;
 
 const LineScoreTotal1 = styled.Text`
@@ -289,7 +338,19 @@ const LineScoreTotal1 = styled.Text`
   flex-grow: 1;
   font-size: ${fontSizes.medium}px;
   height: ${buttonHeight.medium}px;
-  text-align: left;
+  text-align: right;
   line-height: ${buttonHeight.medium}px;
-  padding-left: ${spacing}px;
+  padding-right: ${spacing * 2}px;
+  color: ${black};
+`;
+
+const LineIndexMene = styled.Text`
+  width: 0;
+  flex-shrink: 1;
+  font-size: ${fontSizes.medium}px;
+  height: ${buttonHeight.medium}px;
+  text-align: right;
+  line-height: ${buttonHeight.medium}px;
+  padding-right: ${spacing * 2}px;
+  color: ${darkgray};
 `;
