@@ -12,6 +12,9 @@ import {Tirage} from './pages/tirage';
 import {GamesSelection} from './pages/games_selection';
 import {Round} from './pages/round';
 import {Game} from './pages/game';
+import {SelectionCoinche} from './pages/selection_coinche';
+import {useGames} from './lib/stores/games_store';
+import {usePlayers} from './lib/stores/players_store';
 
 export const App: React.FC = () => (
   <SafeAreaProvider>
@@ -39,6 +42,8 @@ const AppWithProvider: React.FC = () => {
     content = <Game />;
   } else if (app.currentPage === 'round') {
     content = <Round />;
+  } else if (app.currentPage === 'selection_coinche') {
+    content = <SelectionCoinche />;
   }
 
   return (

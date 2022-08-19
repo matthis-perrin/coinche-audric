@@ -7,8 +7,7 @@ import {TopBar} from '../components/top_bar';
 import {fontSizes, spacing, topBarButtonWidth, topBarColor} from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
 import {VerticalSpacing} from '../components/spacing';
-import {getRandomTeams} from '../lib/utilities';
-import {addGame, useGames} from '../lib/stores/games_store';
+import {useGames} from '../lib/stores/games_store';
 import {SelectableGame} from '../components/selectable_game';
 
 export const GamesSelection: React.FC = () => {
@@ -16,7 +15,7 @@ export const GamesSelection: React.FC = () => {
   const [games] = useGames();
 
   const handleAddGamePress = (): void => {
-    addGame(getRandomTeams(2));
+    setApp({...app, currentPage: 'selection_coinche'});
   };
 
   const scrollViewContent: JSX.Element[] = [];
@@ -36,8 +35,8 @@ export const GamesSelection: React.FC = () => {
       <TopBar
         left={
           <CustomButton
-            text="Accueil"
-            icon="home"
+            text="Retour"
+            icon="arrow-left"
             onPress={() => setApp({...app, currentPage: 'accueil'})}
             width={topBarButtonWidth}
           />

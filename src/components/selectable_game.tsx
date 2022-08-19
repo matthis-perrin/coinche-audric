@@ -1,9 +1,11 @@
-import {TouchableWithoutFeedback} from 'react-native';
+import {Alert, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
 import {setApp, useApp} from '../lib/stores/app_store';
 import {delGame, Game} from '../lib/stores/games_store';
-import {borderRadius, buttonHeight, fontSizes, pastilleBackgroundColor, spacing} from '../lib/theme';
+import {black, borderRadius, buttonHeight, fontSizes, pastilleBackgroundColor, spacing} from '../lib/theme';
+import {getScoreWithId} from '../lib/utilities';
 import {CustomButton} from './custom_buttons';
+import {HorizontalSpacing} from './spacing';
 
 interface SelectableGameProps {
   game: Game;
@@ -15,13 +17,23 @@ export const SelectableGame: React.FC<SelectableGameProps> = (props) => {
 
   //______________ FONCTIONS ______________
   const onPressDeletePlayer = (): void => {
-    delGame(props.game);
+    Alert.alert('Confirmation', `Voulez-vous supprimer la partie ?`, [
+      {
+        text: 'Annuler',
+        style: 'cancel',
+      },
+      {
+        text: 'Supprimer',
+        onPress: () => {
+          delGame(props.game);
+        },
+        style: 'destructive',
+      },
+    ]);
   };
   const handleGamePress = (): void => {
-    const new_app = {...app};
-    new_app.currentGameId = props.game.id;
-    new_app.currentPage = 'game';
-    setApp(new_app);
+    setApp({...app, currentGameId: props.game.id});
+    setApp({...app, currentPage: 'game'});
   };
 
   //______________ HTML ______________
@@ -32,16 +44,23 @@ export const SelectableGame: React.FC<SelectableGameProps> = (props) => {
           handleGamePress();
         }}
       >
-        <ScoreWrapper>
-          <Team1Wrapper>
-            <Team1EmojiPlayer1>{props.game.teams[0].players[0].emoji}</Team1EmojiPlayer1>
-            <Team1EmojiPlayer2>{props.game.teams[0].players[1].emoji}</Team1EmojiPlayer2>
-          </Team1Wrapper>
-          <Team2Wrapper>
-            <Team2EmojiPlayer1>{props.game.teams[1].players[0].emoji}</Team2EmojiPlayer1>
-            <Team2EmojiPlayer2>{props.game.teams[1].players[1].emoji}</Team2EmojiPlayer2>
-          </Team2Wrapper>
-        </ScoreWrapper>
+        <ContentWrapper>
+          <TeamWrapper>
+            <TeamEmojiPlayer>{props.game.teams[0].players[0].emoji}</TeamEmojiPlayer>
+            <TeamEmojiPlayer>{props.game.teams[0].players[1].emoji}</TeamEmojiPlayer>
+          </TeamWrapper>
+          <ScoresWrapper>
+            <ScoreWrapper>{getScoreWithId(props.game.id)[0].toLocaleString()}</ScoreWrapper>
+          </ScoresWrapper>
+          <HorizontalSpacing width={spacing / 2} />
+          <ScoresWrapper>
+            <ScoreWrapper>{getScoreWithId(props.game.id)[1].toLocaleString()}</ScoreWrapper>
+          </ScoresWrapper>
+          <TeamWrapper>
+            <TeamEmojiPlayer>{props.game.teams[1].players[0].emoji}</TeamEmojiPlayer>
+            <TeamEmojiPlayer>{props.game.teams[1].players[1].emoji}</TeamEmojiPlayer>
+          </TeamWrapper>
+        </ContentWrapper>
       </TouchableWithoutFeedback>
       <ButtonWrapper>
         <CustomButton
@@ -68,7 +87,7 @@ const GlobalWrapper = styled.View`
   background-color: ${pastilleBackgroundColor};
 `;
 
-const ScoreWrapper = styled.View`
+const ContentWrapper = styled.View`
   flex-grow: 1;
   flex-direction: row;
   justify-content: space-evenly;
@@ -81,20 +100,13 @@ const ButtonWrapper = styled.View`
   flex-shrink: 0;
 `;
 
-//______________ TEAM1 ______________
-const Team1Wrapper = styled.View`
+//______________ TEAM ______________
+const TeamWrapper = styled.View`
   display: flex;
   flex-direction: row;
   align-content: center;
 `;
-const Team1EmojiPlayer1 = styled.Text`
-  font-size: ${fontSizes.extraLarge}px;
-  height: ${buttonHeight.medium}px;
-  width: ${buttonHeight.medium}px;
-  text-align: center;
-  line-height: ${buttonHeight.medium}px;
-`;
-const Team1EmojiPlayer2 = styled.Text`
+const TeamEmojiPlayer = styled.Text`
   font-size: ${fontSizes.extraLarge}px;
   height: ${buttonHeight.medium}px;
   width: ${buttonHeight.medium}px;
@@ -102,23 +114,20 @@ const Team1EmojiPlayer2 = styled.Text`
   line-height: ${buttonHeight.medium}px;
 `;
 
-//______________ TEAM2 ______________
-const Team2Wrapper = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-content: center;
+//______________ SCORE ______________
+const ScoresWrapper = styled.View`
+  flex-direction: column;
+  background-color: ${black};
+  align-items: center;
+  width: 0;
+  flex-grow: 1;
 `;
-const Team2EmojiPlayer1 = styled.Text`
-  font-size: ${fontSizes.extraLarge}px;
+
+const ScoreWrapper = styled.Text`
+  font-size: ${fontSizes.large}px;
   height: ${buttonHeight.medium}px;
-  width: ${buttonHeight.medium}px;
+  flex-grow: 1;
   text-align: center;
   line-height: ${buttonHeight.medium}px;
-`;
-const Team2EmojiPlayer2 = styled.Text`
-  font-size: ${fontSizes.extraLarge}px;
-  height: ${buttonHeight.medium}px;
-  width: ${buttonHeight.medium}px;
-  text-align: center;
-  line-height: ${buttonHeight.medium}px;
+  color: white;
 `;

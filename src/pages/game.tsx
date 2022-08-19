@@ -1,11 +1,12 @@
 import {Fragment} from 'react';
+import {Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
 import {HorizontalSpacing, VerticalSpacing} from '../components/spacing';
 import {TopBar} from '../components/top_bar';
 import {setApp, useApp} from '../lib/stores/app_store';
-import {useGames} from '../lib/stores/games_store';
+import {delRound, getGameWithId, useGames} from '../lib/stores/games_store';
 import {
   darkgray,
   red,
@@ -22,16 +23,31 @@ import {
   white,
   black,
 } from '../lib/theme';
-import {getGameWithId, getScoreWithId, getscoreWithRound} from '../lib/utilities';
+import {getScoreWithId, getscoreWithRound} from '../lib/utilities';
 
 export const Game: React.FC = () => {
   //______________ STORE & STATE ______________
   const [app] = useApp();
+  const [games] = useGames();
 
   //______________ FUNCTIONS ______________
-
+  const handlePressAnnuler = (): void => {
+    Alert.alert('Confirmation', `Voulez-vous supprimer la dernière mène ?`, [
+      {
+        text: 'Annuler',
+        style: 'cancel',
+      },
+      {
+        text: 'Supprimer',
+        onPress: () => {
+          delRound(app.currentGameId);
+        },
+        style: 'destructive',
+      },
+    ]);
+  };
   //______________ INIT ______________
-  if (!app.currentGameId) {
+  if (!app.currentGameId || getGameWithId(app.currentGameId)) {
     return <Fragment></Fragment>;
   }
   const scrollViewContent: JSX.Element[] = [];
@@ -66,6 +82,15 @@ export const Game: React.FC = () => {
           />
         }
         middle={<Titre>Partie</Titre>}
+        right={
+          <CustomButton
+            text="Annuler"
+            icon="backspace-outline"
+            onPress={handlePressAnnuler}
+            width={topBarButtonWidth}
+            disabled={getGameWithId(app.currentGameId)[0].rounds.length > 0 ? false : true}
+          />
+        }
       />
       <WrapperContent>
         <LineTeamsWrapper>
@@ -86,11 +111,11 @@ export const Game: React.FC = () => {
         <VerticalSpacing height={spacing / 2} />
         <LineScoresWrapper>
           <ScoresWrapper>
-            <ScoreWrapper>{getScoreWithId(app.currentGameId)[0]}</ScoreWrapper>
+            <ScoreWrapper>{getScoreWithId(app.currentGameId)[0].toLocaleString()}</ScoreWrapper>
           </ScoresWrapper>
           <HorizontalSpacing width={spacing / 2} />
           <ScoresWrapper>
-            <ScoreWrapper>{getScoreWithId(app.currentGameId)[1]}</ScoreWrapper>
+            <ScoreWrapper>{getScoreWithId(app.currentGameId)[1].toLocaleString()}</ScoreWrapper>
           </ScoresWrapper>
         </LineScoresWrapper>
         <VerticalSpacing height={spacing / 2} />
@@ -121,7 +146,6 @@ const Titre = styled.Text`
   flex-grow: 1;
   text-align: center;
   color: ${topBarColor};
-  margin-right: ${topBarButtonWidth}px;
 `;
 
 //______________ WRAPPER ______________

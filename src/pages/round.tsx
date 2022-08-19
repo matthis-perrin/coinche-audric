@@ -5,7 +5,7 @@ import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
 import {setApp, useApp} from '../lib/stores/app_store';
-import {addRound, getInitialRound} from '../lib/stores/games_store';
+import {addRound, getGameWithId, getInitialRound} from '../lib/stores/games_store';
 import {
   black,
   borderRadius,
@@ -20,7 +20,6 @@ import {
   topBarColor,
   white,
 } from '../lib/theme';
-import {getGameWithId} from '../lib/utilities';
 
 export const Round: React.FC = () => {
   //______________ STORE & STATE ______________
@@ -109,7 +108,7 @@ export const Round: React.FC = () => {
           <CustomButton
             text="Retour"
             icon="arrow-left"
-            onPress={() => setApp({...app, currentPage: 'games_selection'})}
+            onPress={() => setApp({...app, currentPage: 'game'})}
             width={topBarButtonWidth}
           />
         }

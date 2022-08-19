@@ -16,13 +16,22 @@ export const Accueil: React.FC = () => {
       <TopBar middle={<Titre>Accueil</Titre>} />
       <WrapperAdd>
         <CustomButton
+          text="Configuration des joueurs"
+          size="large"
+          icon="account-edit-outline"
+          onPress={() => setApp({...app, currentPage: 'edition'})}
+        />
+      </WrapperAdd>
+      <VerticalSpacing height={spacing} />
+      <WrapperAdd>
+        <CustomButton
           text="Tirer des équipes au hasard"
           size="large"
           icon="dice-3"
           onPress={() => setApp({...app, currentPage: 'selection'})}
         />
       </WrapperAdd>
-      <VerticalSpacing key={'Spacing_1'} height={spacing} />
+      <VerticalSpacing height={spacing} />
       <WrapperAdd>
         <CustomButton
           text="Coinche"

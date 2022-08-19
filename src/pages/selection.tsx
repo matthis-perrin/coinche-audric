@@ -28,7 +28,6 @@ export const Selection: React.FC = () => {
   const [app] = useApp();
   const [players] = usePlayers();
   const [PlayersSelectedId] = usePlayersSelectedId();
-  // const [numberOfTeams, setnumberOfTeams] = useState(2);
 
   const scrollViewContent: JSX.Element[] = [];
   const handelMinusPress = (): void => {
@@ -67,21 +66,13 @@ export const Selection: React.FC = () => {
       <TopBar
         left={
           <CustomButton
-            text="Accueil"
-            icon="home"
+            text="Retour"
+            icon="arrow-left"
             onPress={() => setApp({...app, currentPage: 'accueil'})}
             width={topBarButtonWidth}
           />
         }
         middle={<Titre>{`Sélection`}</Titre>}
-        right={
-          <CustomButton
-            text="Edition"
-            icon="account-edit-outline"
-            onPress={() => setApp({...app, currentPage: 'edition'})}
-            width={topBarButtonWidth}
-          />
-        }
       />
       <WrapperNumberOfTeam>
         <TitreNumberOfTeam>Nombre d'équipe</TitreNumberOfTeam>
@@ -125,6 +116,7 @@ const Titre = styled.Text`
   flex-grow: 1;
   text-align: center;
   color: ${topBarColor};
+  margin-right: ${topBarButtonWidth}px;
 `;
 
 const StyledScrollView = styled.ScrollView`

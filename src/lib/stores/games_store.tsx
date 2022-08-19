@@ -1,5 +1,5 @@
 import {createPersistentDataStore} from '../data_store';
-import {getGameWithId, Team} from '../utilities';
+import {Player} from './players_store';
 
 export interface Round {
   id: number;
@@ -16,6 +16,11 @@ export interface Game {
   rounds: Round[];
 }
 
+export interface Team {
+  id: number;
+  players: Player[];
+}
+
 const gameDataStore = createPersistentDataStore<Game[]>('games', []);
 export const getGames = gameDataStore.getData;
 export const setGames = gameDataStore.setData;
@@ -25,14 +30,14 @@ export const setGame = (game: Game): void => {
   setGames([...getGames(), game]);
 };
 
-export const addGame = (teams: Team[]): void => {
+export const getNewGame = (teams: Team[]): Game => {
   const newGame: Game = {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     id: Math.round(Math.random() * 1000000),
     teams: teams,
     rounds: [],
   };
-  setGame(newGame);
+  return newGame;
 };
 
 export const delGame = (game: Game): void => {
@@ -44,6 +49,24 @@ export const delGame = (game: Game): void => {
     }
   }
   setGames(new_games);
+};
+
+export const delRound = (gameId: number | undefined): void => {
+  if (gameId) {
+    const current_games = getGames();
+    const current_game = getGameWithId(gameId)[0];
+    const new_games: Game[] = [];
+    for (const g of current_games) {
+      if (g.id === current_game.id) {
+        const copy_g = {...g};
+        copy_g.rounds.pop();
+        new_games.push(copy_g);
+      } else {
+        new_games.push(g);
+      }
+    }
+    setGames(new_games);
+  }
 };
 
 export const addRound = (round: Round | undefined, gameId: number | undefined): void => {
@@ -77,4 +100,8 @@ export const getInitialRound = (gameId?: number): Round | undefined => {
     annonce: 0,
   };
   return new_round;
+};
+
+export const getGameWithId = (id: number): Game[] => {
+  return getGames().filter((g) => g.id === id);
 };

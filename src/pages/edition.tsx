@@ -194,7 +194,7 @@ export const Edition: React.FC = () => {
             <CustomButton
               text="Retour"
               icon="arrow-left"
-              onPress={() => setApp({...app, currentPage: 'selection'})}
+              onPress={() => setApp({...app, currentPage: 'accueil'})}
               width={topBarButtonWidth}
             />
           }

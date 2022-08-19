@@ -2,7 +2,15 @@ import {createDataStore} from '../data_store';
 import {Game} from './games_store';
 
 interface App {
-  currentPage: 'accueil' | 'tirage' | 'edition' | 'selection' | 'games_selection' | 'game' | 'round';
+  currentPage:
+    | 'accueil'
+    | 'tirage'
+    | 'edition'
+    | 'selection'
+    | 'games_selection'
+    | 'game'
+    | 'round'
+    | 'selection_coinche';
   numberOfTeams: number;
   currentGameId?: number;
 }
