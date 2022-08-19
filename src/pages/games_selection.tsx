@@ -21,14 +21,17 @@ export const GamesSelection: React.FC = () => {
   const scrollViewContent: JSX.Element[] = [];
   if (games) {
     let firstPlayer = true;
-    games.forEach((game) => {
-      if (firstPlayer) {
-        firstPlayer = false;
-      } else {
-        scrollViewContent.push(<VerticalSpacing key={'spacing_game_' + game.id} height={spacing} />);
-      }
-      scrollViewContent.push(<SelectableGame game={game} key={game.id} />);
-    });
+    games
+      .slice()
+      .reverse()
+      .forEach((game) => {
+        if (firstPlayer) {
+          firstPlayer = false;
+        } else {
+          scrollViewContent.push(<VerticalSpacing key={'spacing_game_' + game.id} height={spacing} />);
+        }
+        scrollViewContent.push(<SelectableGame game={game} key={game.id} />);
+      });
   }
   return (
     <Fragment>
