@@ -331,7 +331,7 @@ const Container = styled.View`
   flex-direction: column;
   flex-grow: 1;
   background-color: ${pastilleBackgroundColor};
-  border-radius: ${borderRadius * 2};
+  border-radius: ${borderRadius * 2}px;
   margin: ${spacing}px;
   margin-top: 0;
   overflow: hidden;
@@ -362,7 +362,7 @@ const FakeButton = styled.View`
 `;
 
 const ButtonWrapper = styled.View`
-  border-radius: ${borderRadius * 2};
+  border-radius: ${borderRadius * 2}px;
   overflow: hidden;
   flex-direction: row;
   flex-grow: 1;

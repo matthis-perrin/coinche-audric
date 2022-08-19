@@ -1,5 +1,5 @@
-import {Fragment} from 'react';
-import {Alert} from 'react-native';
+import {Fragment, useRef} from 'react';
+import {Alert, ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
@@ -29,6 +29,7 @@ export const Game: React.FC = () => {
   //______________ STORE & STATE ______________
   const [app] = useApp();
   const [games] = useGames();
+  const scrollViewRef = useRef<ScrollView | null>();
 
   //______________ FUNCTIONS ______________
   const handlePressAnnuler = (): void => {
@@ -131,7 +132,12 @@ export const Game: React.FC = () => {
           </ScoresWrapper>
         </LineScoresWrapper>
         <VerticalSpacing height={spacing / 2} />
-        <StyledScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+        <StyledScrollView
+          ref={scrollViewRef}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({animated: true})}
+        >
           {scrollViewContent}
         </StyledScrollView>
       </WrapperContent>
