@@ -25,9 +25,8 @@ export const SelectionCoinche: React.FC = () => {
   }, []);
   const handlePressStart = (): void => {
     const new_game = getNewGame(getRandomTeams(2));
-    setApp({...app, currentGameId: new_game.id});
     setGame(new_game);
-    setApp({...app, currentPage: 'game'});
+    setApp({...app, currentGameId: new_game.id, currentPage: 'game'});
   };
   let firstPlayer = true;
   getSortedSelectedPlayers().forEach((p) => {

@@ -1,6 +1,6 @@
 import {Alert, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
-import {getApp, setApp, useApp} from '../lib/stores/app_store';
+import {setApp, useApp} from '../lib/stores/app_store';
 import {delGame, Game} from '../lib/stores/games_store';
 import {black, borderRadius, buttonHeight, fontSizes, pastilleBackgroundColor, spacing} from '../lib/theme';
 import {getScoreWithId} from '../lib/utilities';

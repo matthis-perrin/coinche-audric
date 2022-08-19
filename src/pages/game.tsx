@@ -47,27 +47,39 @@ export const Game: React.FC = () => {
     ]);
   };
   //______________ INIT ______________
-  if (!app.currentGameId || !getGameWithId(app.currentGameId)) {
+  if (!app.currentGameId || !getGameWithId(app.currentGameId) || getGameWithId(app.currentGameId).length === 0) {
     return <Fragment></Fragment>;
   }
   const scrollViewContent: JSX.Element[] = [];
   const game = getGameWithId(app.currentGameId);
   let i = 0;
   const current_score = [0, 0];
-  game[0].rounds.forEach((r) => {
-    const current_round_score = getscoreWithRound(r);
-    current_score[0] = current_score[0] + current_round_score[0];
-    current_score[1] = current_score[1] + current_round_score[1];
-    scrollViewContent.push(
-      <WrapperLineScore>
-        <LineScore0 style={{backgroundColor: i % 2 === 0 ? gray : white}}>{`+ ${current_round_score[0]}`}</LineScore0>
-        <LineScoreTotal0 style={{backgroundColor: i % 2 === 0 ? gray : white}}>{current_score[0]}</LineScoreTotal0>
-        <LineScoreTotal1 style={{backgroundColor: i % 2 === 0 ? gray : white}}>{current_score[1]}</LineScoreTotal1>
-        <LineScore1 style={{backgroundColor: i % 2 === 0 ? gray : white}}>{`+ ${current_round_score[1]}`}</LineScore1>
-      </WrapperLineScore>
-    );
-    i++;
-  });
+  if (game[0]) {
+    game[0].rounds.forEach((r) => {
+      const current_round_score = getscoreWithRound(r);
+      current_score[0] = current_score[0] + current_round_score[0];
+      current_score[1] = current_score[1] + current_round_score[1];
+      scrollViewContent.push(
+        <WrapperLineScore key={r.id}>
+          <LineScore0
+            key={'LineScore0' + r.id}
+            style={{backgroundColor: i % 2 === 0 ? gray : white}}
+          >{`+ ${current_round_score[0]}`}</LineScore0>
+          <LineScoreTotal0 key={'LineScoreTotal0' + r.id} style={{backgroundColor: i % 2 === 0 ? gray : white}}>
+            {current_score[0]}
+          </LineScoreTotal0>
+          <LineScoreTotal1 key={'LineScoreTotal1' + r.id} style={{backgroundColor: i % 2 === 0 ? gray : white}}>
+            {current_score[1]}
+          </LineScoreTotal1>
+          <LineScore1
+            key={'LineScore1' + r.id}
+            style={{backgroundColor: i % 2 === 0 ? gray : white}}
+          >{`+ ${current_round_score[1]}`}</LineScore1>
+        </WrapperLineScore>
+      );
+      i++;
+    });
+  }
 
   //______________ HTML ______________
   return (
@@ -162,7 +174,7 @@ const WrapperContent = styled.View`
   height: 0;
   flex-grow: 1;
   background-color: ${pLight};
-  border-radius: ${borderRadius * 2};
+  border-radius: ${borderRadius * 2}px;
   margin: ${spacing}px;
   margin-top: 0;
   padding: ${spacing / 2}px;
