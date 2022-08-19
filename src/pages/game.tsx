@@ -47,7 +47,7 @@ export const Game: React.FC = () => {
     ]);
   };
   //______________ INIT ______________
-  if (!app.currentGameId || getGameWithId(app.currentGameId)) {
+  if (!app.currentGameId || !getGameWithId(app.currentGameId)) {
     return <Fragment></Fragment>;
   }
   const scrollViewContent: JSX.Element[] = [];
