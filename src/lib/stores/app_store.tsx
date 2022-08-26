@@ -10,7 +10,8 @@ interface App {
     | 'games_selection'
     | 'game'
     | 'round'
-    | 'selection_coinche';
+    | 'selection_coinche'
+    | 'kings_pull';
   numberOfTeams: number;
   currentGameId?: number;
 }

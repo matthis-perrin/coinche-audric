@@ -21,3 +21,7 @@ export const setPlayerSelected = (player: Player): void => {
 export const delPlayerSelected = (player: Player): void => {
   setPlayersSelectedId(getPlayersSelectedId().filter((id) => id !== player.id));
 };
+
+export const resetPlayersSelected = (): void => {
+  setPlayersSelectedId([]);
+};

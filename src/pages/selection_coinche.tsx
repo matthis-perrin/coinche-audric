@@ -75,7 +75,6 @@ export const SelectionCoinche: React.FC = () => {
           disabled={PlayersSelectedId.length !== 4 ? true : false}
         />
       </WrapperBottomButton>
-
       <BottomBar />
     </Fragment>
   );

@@ -6,11 +6,12 @@ import {CustomButton} from '../components/custom_buttons';
 import {TopBar} from '../components/top_bar';
 import {fontSizes, spacing, topBarColor} from '../lib/theme';
 import {useApp, setApp} from '../lib/stores/app_store';
-import {setPlayersSelectedId} from '../lib/stores/selected_players_store.tsx';
+import {resetPlayersSelected} from '../lib/stores/selected_players_store.tsx';
 import {VerticalSpacing} from '../components/spacing';
 
 export const Accueil: React.FC = () => {
   const [app] = useApp();
+  resetPlayersSelected();
   return (
     <Fragment>
       <TopBar middle={<Titre>Accueil</Titre>} />
@@ -39,6 +40,10 @@ export const Accueil: React.FC = () => {
           icon="cards-playing-heart-multiple-outline"
           onPress={() => setApp({...app, currentPage: 'games_selection'})}
         />
+      </WrapperAdd>
+      <VerticalSpacing height={spacing} />
+      <WrapperAdd>
+        <CustomButton text="Tirer les rois" size="large" onPress={() => setApp({...app, currentPage: 'kings_pull'})} />
       </WrapperAdd>
       <StyledScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <BottomBar />
