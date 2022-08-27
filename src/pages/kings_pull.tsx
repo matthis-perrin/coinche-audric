@@ -87,7 +87,7 @@ export const KingsPull: React.FC = () => {
         }
       />
       <WrapperCard>
-        <CardDisplay source={currentCard.img} />
+        <CardDisplay source={currentCard.current.img} />
       </WrapperCard>
       <BottomBar />
     </Fragment>
