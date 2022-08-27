@@ -1,4 +1,4 @@
-import {Fragment, useState} from 'react';
+import {Fragment, useRef, useState} from 'react';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
@@ -51,17 +51,26 @@ export const KingsPull: React.FC = () => {
   const card: Card = {value: 'J', symbol: 'J', img: require('../../assets/Joker.png')};
   const [app] = useApp();
   const [currentCards, setCurrentCards] = useState(cards);
-  const [currentCard, setCurrentCard] = useState(card);
+  const currentCard = useRef(card);
 
   //______________ FUNCTIONS ______________
   const handlePressTirage = (): void => {
-    const selectedIndex = Math.floor(Math.random() * (currentCards.length - 1)) + 1;
-    const current_card = currentCards.find((c, i) => i === selectedIndex);
-    if (current_card) {
-      setCurrentCard(current_card);
+    // const selectedIndex = currentCards.length === 1 ? 0 : Math.floor(Math.random() * (currentCards.length - 1)) + 1;
+    const selectedIndex = Math.floor(Math.random() * currentCards.length);
+    const new_card = currentCards.find((c, i) => i === selectedIndex);
+    if (new_card) {
+      currentCard.current = new_card;
     }
     setCurrentCards(currentCards.filter((c, i) => i !== selectedIndex));
+    clearTimeout();
   };
+
+  if (currentCards.length > 0) {
+    setTimeout(() => {
+      handlePressTirage();
+    }, 1000);
+    console.log(currentCards.length);
+  }
 
   //______________ HTML ______________
   return (
@@ -80,9 +89,6 @@ export const KingsPull: React.FC = () => {
       <WrapperCard>
         <CardDisplay source={currentCard.img} />
       </WrapperCard>
-      <WrapperBottomButton>
-        <CustomButton icon="cards" size="large" onPress={() => handlePressTirage()} />
-      </WrapperBottomButton>
       <BottomBar />
     </Fragment>
   );
