@@ -14,6 +14,7 @@ interface App {
     | 'kings_pull';
   numberOfTeams: number;
   currentGameId?: number;
+  initial_taker_team_index?: number;
 }
 
 const appStore = createDataStore<App>({currentPage: 'accueil', numberOfTeams: 2});

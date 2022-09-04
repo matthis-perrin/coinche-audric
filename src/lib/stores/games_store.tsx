@@ -87,7 +87,7 @@ export const addRound = (round: Round | undefined, gameId: number | undefined): 
   }
 };
 
-export const getInitialRound = (gameId?: number): Round | undefined => {
+export const getInitialRound = (gameId?: number, taker_team?: number): Round | undefined => {
   if (!gameId) {
     return;
   }
@@ -98,6 +98,7 @@ export const getInitialRound = (gameId?: number): Round | undefined => {
     surcoinche: false,
     successful: '?',
     annonce: 0,
+    taker_team_index: taker_team !== undefined ? taker_team : undefined,
   };
   return new_round;
 };

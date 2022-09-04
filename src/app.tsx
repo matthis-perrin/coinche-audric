@@ -13,8 +13,6 @@ import {GamesSelection} from './pages/games_selection';
 import {Round} from './pages/round';
 import {Game} from './pages/game';
 import {SelectionCoinche} from './pages/selection_coinche';
-import {useGames} from './lib/stores/games_store';
-import {usePlayers} from './lib/stores/players_store';
 import {KingsPull} from './pages/kings_pull';
 
 export const App: React.FC = () => (

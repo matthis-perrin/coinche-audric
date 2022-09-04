@@ -1,4 +1,4 @@
-import {Fragment, useState} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {Text, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
@@ -24,8 +24,7 @@ import {
 export const Round: React.FC = () => {
   //______________ STORE & STATE ______________
   const [app] = useApp();
-  const [round, setRound] = useState(getInitialRound(app.currentGameId));
-
+  const [round, setRound] = useState(getInitialRound(app.currentGameId, app.initial_taker_team_index));
   //______________ FUNCTIONS ______________
   const handlePressTeam = (index_team: number): void => {
     if (!round) {

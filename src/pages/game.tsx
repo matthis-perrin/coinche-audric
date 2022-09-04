@@ -1,5 +1,5 @@
 import {Fragment, useRef} from 'react';
-import {Alert, ScrollView} from 'react-native';
+import {Alert, ScrollView, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
@@ -9,12 +9,9 @@ import {setApp, useApp} from '../lib/stores/app_store';
 import {delRound, getGameWithId, useGames} from '../lib/stores/games_store';
 import {
   darkgray,
-  red,
-  green,
   borderRadius,
   buttonHeight,
   fontSizes,
-  pastilleBackgroundColor,
   spacing,
   topBarButtonWidth,
   topBarColor,
@@ -22,7 +19,6 @@ import {
   gray,
   white,
   black,
-  primary,
   pVeryLight,
   borderColorGame,
 } from '../lib/theme';
@@ -35,6 +31,9 @@ export const Game: React.FC = () => {
   const scrollViewRef = useRef<ScrollView | null>();
 
   //______________ FUNCTIONS ______________
+  const handlePressTeam = (i: number): void => {
+    setApp({...app, currentPage: 'round', initial_taker_team_index: i});
+  };
   const handlePressAnnuler = (): void => {
     Alert.alert('Confirmation', `Voulez-vous supprimer la dernière mène ?`, [
       {
@@ -123,41 +122,40 @@ export const Game: React.FC = () => {
       />
       <WrapperContent>
         <LineTeamsWrapper>
-          <TeamsWrapper>
-            <TeamWrapper>
-              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[0].emoji}</TeamEmojiPlayer>
-              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[1].emoji}</TeamEmojiPlayer>
-            </TeamWrapper>
-          </TeamsWrapper>
+          <TouchableWithoutFeedback onPress={() => handlePressTeam(0)}>
+            <TeamsWrapper>
+              <TeamWrapper>
+                <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[0].emoji}</TeamEmojiPlayer>
+                <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[0].players[1].emoji}</TeamEmojiPlayer>
+              </TeamWrapper>
+              <ScoreWrapper
+                style={{
+                  fontWeight:
+                    getScoreWithId(app.currentGameId)[0] > getScoreWithId(app.currentGameId)[1] ? '600' : '300',
+                }}
+              >
+                {getScoreWithId(app.currentGameId)[0].toLocaleString()}
+              </ScoreWrapper>
+            </TeamsWrapper>
+          </TouchableWithoutFeedback>
           <HorizontalSpacing width={spacing} />
-          <TeamsWrapper>
-            <TeamWrapper>
-              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[0].emoji}</TeamEmojiPlayer>
-              <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[1].emoji}</TeamEmojiPlayer>
-            </TeamWrapper>
-          </TeamsWrapper>
+          <TouchableWithoutFeedback onPress={() => handlePressTeam(1)}>
+            <TeamsWrapper>
+              <TeamWrapper>
+                <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[0].emoji}</TeamEmojiPlayer>
+                <TeamEmojiPlayer>{getGameWithId(app.currentGameId)[0].teams[1].players[1].emoji}</TeamEmojiPlayer>
+              </TeamWrapper>
+              <ScoreWrapper
+                style={{
+                  fontWeight:
+                    getScoreWithId(app.currentGameId)[1] > getScoreWithId(app.currentGameId)[0] ? '600' : '300',
+                }}
+              >
+                {getScoreWithId(app.currentGameId)[1].toLocaleString()}
+              </ScoreWrapper>
+            </TeamsWrapper>
+          </TouchableWithoutFeedback>
         </LineTeamsWrapper>
-        <LineScoresWrapper>
-          <ScoresWrapper>
-            <ScoreWrapper
-              style={{
-                fontWeight: getScoreWithId(app.currentGameId)[0] > getScoreWithId(app.currentGameId)[1] ? '600' : '300',
-              }}
-            >
-              {getScoreWithId(app.currentGameId)[0].toLocaleString()}
-            </ScoreWrapper>
-          </ScoresWrapper>
-          <HorizontalSpacing width={spacing} />
-          <ScoresWrapper>
-            <ScoreWrapper
-              style={{
-                fontWeight: getScoreWithId(app.currentGameId)[1] > getScoreWithId(app.currentGameId)[0] ? '600' : '300',
-              }}
-            >
-              {getScoreWithId(app.currentGameId)[1].toLocaleString()}
-            </ScoreWrapper>
-          </ScoresWrapper>
-        </LineScoresWrapper>
         <VerticalSpacing height={spacing} />
         <StyledScrollView
           ref={scrollViewRef}
@@ -173,7 +171,7 @@ export const Game: React.FC = () => {
           text="Ajouter une mène"
           size="large"
           icon="plus-circle-outline"
-          onPress={() => setApp({...app, currentPage: 'round'})}
+          onPress={() => setApp({...app, currentPage: 'round', initial_taker_team_index: undefined})}
         />
       </WrapperAdd>
       <BottomBar />
@@ -230,15 +228,7 @@ const TeamsWrapper = styled.View`
   background-color: ${white};
   align-items: center;
   flex-grow: 1;
-  border-top-style: solid;
-  border-top-color: ${borderColorGame};
-  border-top-width: 1px;
-  border-right-style: solid;
-  border-right-color: ${borderColorGame};
-  border-right-width: 1px;
-  border-left-style: solid;
-  border-left-color: ${borderColorGame};
-  border-left-width: 1px;
+  border: solid ${borderColorGame} 1px;
 `;
 
 const TeamWrapper = styled.View`
@@ -253,29 +243,6 @@ const TeamEmojiPlayer = styled.Text`
   width: ${buttonHeight.medium}px;
   text-align: center;
   line-height: ${buttonHeight.medium}px;
-`;
-
-//______________ SCORE ______________
-const LineScoresWrapper = styled.View`
-  flex-direction: row;
-  justify-content: space-evenly;
-  background-color: ${gray};
-`;
-const ScoresWrapper = styled.View`
-  flex-direction: column;
-  background-color: ${white};
-  align-items: center;
-  width: 0;
-  flex-grow: 1;
-  border-bottom-style: solid;
-  border-bottom-color: ${borderColorGame};
-  border-bottom-width: 1px;
-  border-right-style: solid;
-  border-right-color: ${borderColorGame};
-  border-right-width: 1px;
-  border-left-style: solid;
-  border-left-color: ${borderColorGame};
-  border-left-width: 1px;
 `;
 
 const ScoreWrapper = styled.Text`
