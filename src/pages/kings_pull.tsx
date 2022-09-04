@@ -1,4 +1,4 @@
-import {Fragment, useRef, useState} from 'react';
+import {Fragment, useState} from 'react';
 import styled from 'styled-components/native';
 import {BottomBar} from '../components/bottom_bar';
 import {CustomButton} from '../components/custom_buttons';
@@ -51,7 +51,8 @@ export const KingsPull: React.FC = () => {
   const card: Card = {value: 'J', symbol: 'J', img: require('../../assets/Joker.png')};
   const [app] = useApp();
   const [currentCards, setCurrentCards] = useState(cards);
-  const currentCard = useRef(card);
+  let currentPlayerCards = [card, card, card, card];
+  let currentPlayer = 0;
 
   //______________ FUNCTIONS ______________
   const handlePressTirage = (): void => {
@@ -59,17 +60,18 @@ export const KingsPull: React.FC = () => {
     const selectedIndex = Math.floor(Math.random() * currentCards.length);
     const new_card = currentCards.find((c, i) => i === selectedIndex);
     if (new_card) {
-      currentCard.current = new_card;
+      currentPlayerCards[currentPlayer] = new_card;
     }
     setCurrentCards(currentCards.filter((c, i) => i !== selectedIndex));
+    currentPlayer = currentPlayer + 1;
     clearTimeout();
+    console.log(currentCards.length);
   };
 
   if (currentCards.length > 0) {
     setTimeout(() => {
       handlePressTirage();
     }, 1000);
-    console.log(currentCards.length);
   }
 
   //______________ HTML ______________
@@ -87,7 +89,16 @@ export const KingsPull: React.FC = () => {
         }
       />
       <WrapperCard>
-        <CardDisplay source={currentCard.current.img} />
+        <CardDisplay source={currentPlayerCards[0].img} />
+      </WrapperCard>
+      <WrapperCard>
+        <CardDisplay source={currentPlayerCards[1].img} />
+      </WrapperCard>
+      <WrapperCard>
+        <CardDisplay source={currentPlayerCards[2].img} />
+      </WrapperCard>
+      <WrapperCard>
+        <CardDisplay source={currentPlayerCards[3].img} />
       </WrapperCard>
       <BottomBar />
     </Fragment>
@@ -105,12 +116,6 @@ const Titre = styled.Text`
   margin-right: ${topBarButtonWidth}px;
 `;
 
-const WrapperBottomButton = styled.View`
-  align-items: center;
-  margin: ${spacing}px;
-  margin-top: 0;
-`;
-
 const WrapperCard = styled.View`
   display: flex;
   align-items: center;
@@ -119,6 +124,7 @@ const WrapperCard = styled.View`
 `;
 
 const CardDisplay = styled.Image`
-  width: 250px;
-  height: 363px;
+  width: 125px;
+  height: 181.5px;
+  transform: rotate(90deg);
 `;
